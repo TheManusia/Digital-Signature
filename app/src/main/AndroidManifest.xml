@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SignaturePDF">
+        <activity android:name=".ui.PdfViewer.PdfActivity"></activity>
         <activity android:name=".ui.New.NewActivity" />
         <activity android:name=".ui.Home.HomeActivity" />
         <activity android:name=".MainActivity">

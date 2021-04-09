@@ -1,8 +1,12 @@
 package xyz.themanusia.signaturepdf.ui.Home;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -11,10 +15,11 @@ import java.util.List;
 
 import xyz.themanusia.signaturepdf.R;
 import xyz.themanusia.signaturepdf.databinding.ActivityHomeBinding;
+import xyz.themanusia.signaturepdf.ui.PdfViewer.PdfActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
-    private List<PdfEntity> pdfEntityList = new ArrayList<>();
+    private final List<PdfEntity> pdfEntityList = new ArrayList<>();
     private boolean isOpen = false;
 
     @Override
@@ -28,12 +33,33 @@ public class HomeActivity extends AppCompatActivity {
         binding.rvPdf.setLayoutManager(new LinearLayoutManager(this));
         binding.rvPdf.setHasFixedSize(true);
 
+        binding.fbOpen.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("application/pdf");
+            startActivityForResult(intent, 1);
+        });
+
         binding.fbTrigger.setOnClickListener(view -> {
             if (isOpen)
                 closeFbMenu();
             else
                 showFbMenu();
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri pdfUri = data.getData();
+                Intent intent = new Intent(this, PdfActivity.class);
+                intent.putExtra(PdfActivity.PDF_URI, pdfUri.toString());
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Can't Open File", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
