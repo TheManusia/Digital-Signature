@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PdfEntity {
     private String name;
     private String path;
+    private int lastPage;
 }
