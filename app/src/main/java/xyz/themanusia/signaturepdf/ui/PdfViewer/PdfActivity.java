@@ -20,8 +20,8 @@ public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
     public static final String PDF_URI = "PDF_URI";
     private Uri pdfUri;
-    int currentPage;
-    int pageCount;
+    private int currentPage;
+    private int pageCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

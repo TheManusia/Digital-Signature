@@ -16,6 +16,7 @@ import java.util.List;
 import xyz.themanusia.signaturepdf.R;
 import xyz.themanusia.signaturepdf.databinding.ActivityHomeBinding;
 import xyz.themanusia.signaturepdf.ui.PdfViewer.PdfActivity;
+import xyz.themanusia.signaturepdf.ui.SignaturePad.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
@@ -38,6 +39,9 @@ public class HomeActivity extends AppCompatActivity {
             intent.setType("application/pdf");
             startActivityForResult(intent, 1);
         });
+
+        binding.fbNew.setOnClickListener(view ->
+                startActivity(new Intent(this, SignatureActivity.class)));
 
         binding.fbTrigger.setOnClickListener(view -> {
             if (isOpen)
