@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.Home;
+package xyz.themanusia.signaturepdf.ui.home;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,15 +12,16 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.themanusia.signaturepdf.data.PdfEntity;
 import xyz.themanusia.signaturepdf.databinding.PdfItemBinding;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-    private List<PdfEntity> pdfEntities = new ArrayList<>();
+    private final List<PdfEntity> pdfEntities = new ArrayList<>();
     private final static String TAG = "HomeAdapter.class";
 
     public HomeAdapter(List<PdfEntity> pdf) {
         pdfEntities.addAll(pdf);
-        Log.e(TAG, "HomeAdapter: "+pdfEntities.isEmpty() );
+        Log.e(TAG, "HomeAdapter: " + pdfEntities.isEmpty());
     }
 
     @NonNull
@@ -42,6 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final PdfItemBinding binding;
+
         public ViewHolder(@NonNull PdfItemBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
@@ -53,7 +55,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             itemView.setOnClickListener(view ->
                     Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show());
+                            .setAction("Action", null).show());
         }
     }
 }

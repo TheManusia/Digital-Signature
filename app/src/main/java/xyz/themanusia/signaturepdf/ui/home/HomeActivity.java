@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.Home;
+package xyz.themanusia.signaturepdf.ui.home;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.themanusia.signaturepdf.R;
+import xyz.themanusia.signaturepdf.data.PdfEntity;
 import xyz.themanusia.signaturepdf.databinding.ActivityHomeBinding;
-import xyz.themanusia.signaturepdf.ui.PdfViewer.PdfActivity;
-import xyz.themanusia.signaturepdf.ui.SignaturePad.SignatureActivity;
+import xyz.themanusia.signaturepdf.ui.pdf.PdfActivity;
+import xyz.themanusia.signaturepdf.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
@@ -76,14 +77,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showFbMenu() {
         isOpen = true;
-        binding.fbOpen.setVisibility(View.VISIBLE);
-        binding.tvOpen.setVisibility(View.VISIBLE);
-        binding.fbNew.setVisibility(View.VISIBLE);
-        binding.tvNew.setVisibility(View.VISIBLE);
-        binding.fbOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60));
-        binding.fbNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110));
-        binding.tvOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60));
-        binding.tvNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110));
+        binding.fbOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbOpen.setVisibility(View.VISIBLE));
+        binding.fbNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.tvOpen.setVisibility(View.VISIBLE));
+        binding.tvOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbNew.setVisibility(View.VISIBLE));
+        binding.tvNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.tvNew.setVisibility(View.VISIBLE));
     }
 
     private void closeFbMenu() {

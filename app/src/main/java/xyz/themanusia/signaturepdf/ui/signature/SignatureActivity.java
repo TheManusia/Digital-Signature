@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.SignaturePad;
+package xyz.themanusia.signaturepdf.ui.signature;
 
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
@@ -27,7 +27,6 @@ public class SignatureActivity extends AppCompatActivity {
     private ActivitySignatureBinding binding;
     private int save;
     private String title;
-    private static final String TAG = SignatureActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class SignatureActivity extends AppCompatActivity {
         binding.signaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
             @Override
             public void onStartSigning() {
-
             }
 
             @Override
@@ -69,7 +67,6 @@ public class SignatureActivity extends AppCompatActivity {
             builder.setSingleChoiceItems(item, 0, (dialogInterface, i) -> save = i);
 
             builder.setPositiveButton("Save", (dialogInterface, i) -> {
-
                 if (title.length() == 0) {
                     Toast.makeText(this, "Insert Title!", Toast.LENGTH_SHORT).show();
                     dialogInterface.cancel();
@@ -86,7 +83,6 @@ public class SignatureActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
             builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
 

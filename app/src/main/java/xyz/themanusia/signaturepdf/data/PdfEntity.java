@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.Home;
+package xyz.themanusia.signaturepdf.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -14,15 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SignaturePDF">
         <activity
-            android:name=".ui.SignaturePad.SignatureActivity"
+            android:name=".ui.signature.SignatureActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.FullScreen" />
         <activity
-            android:name=".ui.PdfViewer.PdfActivity"
+            android:name=".ui.pdf.PdfActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".ui.New.NewActivity" />
-        <activity android:name=".ui.Home.HomeActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.home.HomeActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

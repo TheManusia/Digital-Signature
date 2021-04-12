@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.PdfViewer;
+package xyz.themanusia.signaturepdf.ui.pdf;
 
 import android.app.AlertDialog;
 import android.net.Uri;
