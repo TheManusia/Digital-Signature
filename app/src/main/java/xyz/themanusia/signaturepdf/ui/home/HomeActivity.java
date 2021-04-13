@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.themanusia.signaturepdf.R;
 import xyz.themanusia.signaturepdf.data.PdfEntity;
 import xyz.themanusia.signaturepdf.databinding.ActivityHomeBinding;
 import xyz.themanusia.signaturepdf.ui.pdf.PdfActivity;
@@ -22,7 +21,7 @@ import xyz.themanusia.signaturepdf.ui.signature.SignatureActivity;
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private final List<PdfEntity> pdfEntityList = new ArrayList<>();
-    private boolean isOpen = false;
+//    private boolean isOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +34,22 @@ public class HomeActivity extends AppCompatActivity {
         binding.rvPdf.setLayoutManager(new LinearLayoutManager(this));
         binding.rvPdf.setHasFixedSize(true);
 
-        binding.fbOpen.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            startActivityForResult(intent, 1);
-        });
+//        binding.fbOpen.setOnClickListener(view -> {
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.setType("application/pdf");
+//            startActivityForResult(intent, 1);
+//        });
 
-        binding.fbNew.setOnClickListener(view ->
+//        binding.fbNew.setOnClickListener(view ->
+//                startActivity(new Intent(this, SignatureActivity.class)));
+
+        binding.fbTrigger.setOnClickListener(view -> //{
                 startActivity(new Intent(this, SignatureActivity.class)));
-
-        binding.fbTrigger.setOnClickListener(view -> {
-            if (isOpen)
-                closeFbMenu();
-            else
-                showFbMenu();
-        });
+//            if (isOpen)
+//                closeFbMenu();
+//            else
+//                showFbMenu();
+//      }
     }
 
     @Override
@@ -67,27 +67,27 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isOpen)
-            closeFbMenu();
-        else
-            super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (isOpen)
+//            closeFbMenu();
+//        else
+//            super.onBackPressed();
+//    }
 
-    private void showFbMenu() {
-        isOpen = true;
-        binding.fbOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbOpen.setVisibility(View.VISIBLE));
-        binding.fbNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.tvOpen.setVisibility(View.VISIBLE));
-        binding.tvOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbNew.setVisibility(View.VISIBLE));
-        binding.tvNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.tvNew.setVisibility(View.VISIBLE));
-    }
+//    private void showFbMenu() {
+//        isOpen = true;
+//        binding.fbOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbOpen.setVisibility(View.VISIBLE));
+//        binding.tvOpen.animate().translationY(-getResources().getDimension(R.dimen.standard_60)).withStartAction(() -> binding.fbNew.setVisibility(View.VISIBLE));
+//        binding.fbNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.fbNew.setVisibility(View.VISIBLE));
+//        binding.tvNew.animate().translationY(-getResources().getDimension(R.dimen.standard_110)).withStartAction(() -> binding.tvNew.setVisibility(View.VISIBLE));
+//    }
 
-    private void closeFbMenu() {
-        isOpen = false;
-        binding.fbNew.animate().translationY(0).withEndAction(() -> binding.fbNew.setVisibility(View.GONE));
-        binding.fbOpen.animate().translationY(0).withEndAction(() -> binding.fbOpen.setVisibility(View.GONE));
-        binding.tvNew.animate().translationY(0).withEndAction(() -> binding.tvNew.setVisibility(View.GONE));
-        binding.tvOpen.animate().translationY(0).withEndAction(() -> binding.tvOpen.setVisibility(View.GONE));
-    }
+//    private void closeFbMenu() {
+//        isOpen = false;
+//        binding.fbNew.animate().translationY(0).withEndAction(() -> binding.fbNew.setVisibility(View.GONE));
+//        binding.tvNew.animate().translationY(0).withEndAction(() -> binding.tvNew.setVisibility(View.GONE));
+//        binding.fbOpen.animate().translationY(0).withEndAction(() -> binding.fbOpen.setVisibility(View.GONE));
+//        binding.tvOpen.animate().translationY(0).withEndAction(() -> binding.tvOpen.setVisibility(View.GONE));
+//    }
 }

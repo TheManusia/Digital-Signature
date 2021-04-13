@@ -28,51 +28,51 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_baseline_add_24" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fbNew"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="invisible"
-        app:fabCustomSize="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/fbTrigger"
-        app:layout_constraintStart_toStartOf="@+id/fbTrigger"
-        app:layout_constraintTop_toTopOf="@+id/fbTrigger"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fbNew"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:visibility="invisible"-->
+<!--        app:fabCustomSize="40dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/fbTrigger"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/fbTrigger"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/fbTrigger"-->
+<!--        app:srcCompat="@drawable/ic_baseline_add_24" />-->
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fbOpen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="invisible"
-        app:fabCustomSize="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/fbNew"
-        app:layout_constraintEnd_toEndOf="@+id/fbNew"
-        app:layout_constraintStart_toStartOf="@+id/fbNew"
-        app:layout_constraintTop_toTopOf="@+id/fbNew"
-        app:srcCompat="@drawable/ic_baseline_insert_drive_file_24" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fbOpen"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:visibility="invisible"-->
+<!--        app:fabCustomSize="40dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/fbNew"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/fbNew"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/fbNew"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/fbNew"-->
+<!--        app:srcCompat="@drawable/ic_baseline_insert_drive_file_24" />-->
 
-    <TextView
-        android:id="@+id/tvNew"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/new_file"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/fbNew"
-        app:layout_constraintEnd_toStartOf="@+id/fbNew"
-        app:layout_constraintTop_toTopOf="@+id/fbNew" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvNew"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/new_file"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/fbNew"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/fbNew"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/fbNew" />-->
 
-    <TextView
-        android:id="@+id/tvOpen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/open"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/fbOpen"
-        app:layout_constraintEnd_toStartOf="@+id/fbOpen"
-        app:layout_constraintTop_toTopOf="@+id/fbOpen" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvOpen"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/open"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/fbOpen"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/fbOpen"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/fbOpen" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
