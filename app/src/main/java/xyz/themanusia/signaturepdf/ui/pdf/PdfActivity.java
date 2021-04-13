@@ -44,6 +44,8 @@ public class PdfActivity extends AppCompatActivity {
             finish();
         }
 
+        binding.clipArt.setVisibility(View.GONE);
+
         binding.pdfView.fromUri(pdfUri)
                 .enableSwipe(true)
                 .spacing(8)
