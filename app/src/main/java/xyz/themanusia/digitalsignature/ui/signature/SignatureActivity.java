@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.yalantis.ucrop.UCrop;
@@ -20,18 +21,22 @@ import java.io.FileOutputStream;
 
 import xyz.themanusia.digitalsignature.MainActivity;
 import xyz.themanusia.digitalsignature.R;
+import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
 import xyz.themanusia.digitalsignature.databinding.ActivitySignatureBinding;
 
 public class SignatureActivity extends AppCompatActivity {
     private ActivitySignatureBinding binding;
-//    private int save;
+    //    private int save;
     private String title;
+    private SignatureViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignatureBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        viewModel = new ViewModelProvider(this).get(SignatureViewModel.class);
 
         binding.btnClear.setEnabled(false);
         binding.btnSave.setEnabled(false);
@@ -105,10 +110,21 @@ public class SignatureActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            if (data != null) {
+                Uri output = UCrop.getOutput(data);
+                PDFEntity entity = new PDFEntity();
+                if (output != null)
+                    entity.setPath(output.toString());
+                insertToDB(entity);
+            }
             Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void insertToDB(PDFEntity entity) {
+        viewModel.insertData(entity);
     }
 
     @Override

@@ -8,19 +8,16 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import xyz.themanusia.digitalsignature.data.PdfEntity;
 import xyz.themanusia.digitalsignature.databinding.ActivityHomeBinding;
 import xyz.themanusia.digitalsignature.ui.pdf.PdfActivity;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
-    private final List<PdfEntity> pdfEntityList = new ArrayList<>();
+    private HomeViewModel viewModel;
 //    private boolean isOpen = false;
 
     @Override
@@ -29,10 +26,14 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.rvPdf.setAdapter(new HomeAdapter(pdfEntityList));
-        binding.rvPdf.setVisibility(View.VISIBLE);
-        binding.rvPdf.setLayoutManager(new LinearLayoutManager(this));
-        binding.rvPdf.setHasFixedSize(true);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+        viewModel.getAll().observe(this, pdfEntities -> {
+            binding.rvPdf.setAdapter(new HomeAdapter(pdfEntities));
+            binding.rvPdf.setVisibility(View.VISIBLE);
+            binding.rvPdf.setLayoutManager(new LinearLayoutManager(this));
+            binding.rvPdf.setHasFixedSize(true);
+        });
 
 //        binding.fbOpen.setOnClickListener(view -> {
 //            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

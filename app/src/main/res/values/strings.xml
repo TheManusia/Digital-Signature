@@ -16,7 +16,7 @@
     <string name="clear">Clear</string>
     <string name="save">Save</string>
     <string name="title">Title</string>
-    <string name="path">Path</string>
+    <string name="path">%s %s</string>
     <string name="for_scalling">For Scalling</string>
     <string name="for_image">For Image</string>
 </resources>
