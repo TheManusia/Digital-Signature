@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.clipart;
+package xyz.themanusia.digitalsignature.ui.clipart;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

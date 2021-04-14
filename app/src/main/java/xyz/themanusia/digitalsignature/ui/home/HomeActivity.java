@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.home;
+package xyz.themanusia.digitalsignature.ui.home;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.themanusia.signaturepdf.data.PdfEntity;
-import xyz.themanusia.signaturepdf.databinding.ActivityHomeBinding;
-import xyz.themanusia.signaturepdf.ui.pdf.PdfActivity;
-import xyz.themanusia.signaturepdf.ui.signature.SignatureActivity;
+import xyz.themanusia.digitalsignature.data.PdfEntity;
+import xyz.themanusia.digitalsignature.databinding.ActivityHomeBinding;
+import xyz.themanusia.digitalsignature.ui.pdf.PdfActivity;
+import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;

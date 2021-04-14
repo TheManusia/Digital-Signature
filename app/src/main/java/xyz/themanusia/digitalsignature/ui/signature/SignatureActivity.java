@@ -1,11 +1,14 @@
-package xyz.themanusia.signaturepdf.ui.signature;
+package xyz.themanusia.digitalsignature.ui.signature;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
@@ -14,14 +17,15 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import xyz.themanusia.signaturepdf.MainActivity;
-import xyz.themanusia.signaturepdf.databinding.ActivitySignatureBinding;
+import xyz.themanusia.digitalsignature.MainActivity;
+import xyz.themanusia.digitalsignature.databinding.ActivitySignatureBinding;
 
 public class SignatureActivity extends AppCompatActivity {
     private ActivitySignatureBinding binding;
@@ -66,7 +70,7 @@ public class SignatureActivity extends AppCompatActivity {
             title.setHint("Title");
             builder.setSingleChoiceItems(item, 0, (dialogInterface, i) -> save = i);
 
-            builder.setPositiveButton("Save", (dialogInterface, i) -> {
+            builder.setPositiveButton("Edit", (dialogInterface, i) -> {
                 if (title.length() == 0) {
                     Toast.makeText(this, "Insert Title!", Toast.LENGTH_SHORT).show();
                     dialogInterface.cancel();
@@ -90,7 +94,17 @@ public class SignatureActivity extends AppCompatActivity {
         });
     }
 
-    void saveAsBitmap(Bitmap signatureBitmap) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Uri saveAsBitmap(Bitmap signatureBitmap) {
         String path = MainActivity.FOLDER_PATH + File.separator + title + ".png";
 
         File file = new File(path);
@@ -107,6 +121,7 @@ public class SignatureActivity extends AppCompatActivity {
                 Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+        return Uri.fromFile(file);
     }
 
     private void saveAsPdf(Bitmap transparentSignatureBitmap) {

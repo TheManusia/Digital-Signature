@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf;
+package xyz.themanusia.digitalsignature;
 
 import android.content.Intent;
 import android.os.Build;
@@ -12,7 +12,7 @@ import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 
-import xyz.themanusia.signaturepdf.ui.home.HomeActivity;
+import xyz.themanusia.digitalsignature.ui.home.HomeActivity;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;

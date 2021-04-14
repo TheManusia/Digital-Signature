@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.home;
+package xyz.themanusia.digitalsignature.ui.home;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.themanusia.signaturepdf.data.PdfEntity;
-import xyz.themanusia.signaturepdf.databinding.PdfItemBinding;
+import xyz.themanusia.digitalsignature.data.PdfEntity;
+import xyz.themanusia.digitalsignature.databinding.PdfItemBinding;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private final List<PdfEntity> pdfEntities = new ArrayList<>();

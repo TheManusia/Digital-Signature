@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf;
+package xyz.themanusia.digitalsignature;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package xyz.themanusia.signaturepdf.ui.pdf;
+package xyz.themanusia.digitalsignature.ui.pdf;
 
 import android.app.AlertDialog;
 import android.net.Uri;
@@ -12,9 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import xyz.themanusia.signaturepdf.R;
-import xyz.themanusia.signaturepdf.databinding.ActivityPdfBinding;
-import xyz.themanusia.signaturepdf.databinding.PageDialogBinding;
+import xyz.themanusia.digitalsignature.R;
+import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
+import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
 
 public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
