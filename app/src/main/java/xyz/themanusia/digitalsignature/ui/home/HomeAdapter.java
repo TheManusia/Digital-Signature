@@ -1,5 +1,6 @@
 package xyz.themanusia.digitalsignature.ui.home;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -9,7 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
 import xyz.themanusia.digitalsignature.databinding.PdfItemBinding;
 import xyz.themanusia.digitalsignature.tools.Tools;
+import xyz.themanusia.digitalsignature.ui.image.ImageActivity;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private final List<PDFEntity> pdfEntities = new ArrayList<>();
@@ -70,10 +73,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     dateString
             ));
 
+            Glide.with(binding.getRoot())
+                    .load(uri)
+                    .apply(new RequestOptions().override(64, 64))
+                    .into(binding.imageView);
 
-            itemView.setOnClickListener(view ->
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show());
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), ImageActivity.class);
+                intent.putExtra(ImageActivity.URI_EXTRA, uri.toString());
+                itemView.getContext().startActivity(intent);
+            });
         }
     }
 }

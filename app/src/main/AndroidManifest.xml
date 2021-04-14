@@ -13,21 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SignaturePDF">
+        <activity android:name=".ui.image.ImageActivity"></activity>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name="xyz.themanusia.digitalsignature.ui.signature.SignatureActivity"
+            android:name=".ui.signature.SignatureActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.FullScreen" />
         <activity
-            android:name="xyz.themanusia.digitalsignature.ui.pdf.PdfActivity"
+            android:name=".ui.pdf.PdfActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name="xyz.themanusia.digitalsignature.ui.home.HomeActivity" />
+        <activity android:name=".ui.home.HomeActivity" />
         <activity
-            android:name="xyz.themanusia.digitalsignature.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
