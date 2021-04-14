@@ -8,28 +8,23 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gcacace.signaturepad.views.SignaturePad;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.yalantis.ucrop.UCrop;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 import xyz.themanusia.digitalsignature.MainActivity;
+import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivitySignatureBinding;
 
 public class SignatureActivity extends AppCompatActivity {
     private ActivitySignatureBinding binding;
-    private int save;
+//    private int save;
     private String title;
 
     @Override
@@ -63,12 +58,12 @@ public class SignatureActivity extends AppCompatActivity {
 
         binding.btnSave.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Save As");
-            String[] item = {"PNG", "PDF"};
+            builder.setTitle("Save");
+//            String[] item = {"PNG", "PDF"};
             final EditText title = new EditText(this);
             builder.setView(title);
             title.setHint("Title");
-            builder.setSingleChoiceItems(item, 0, (dialogInterface, i) -> save = i);
+//            builder.setSingleChoiceItems(item, 0, (dialogInterface, i) -> save = i);
 
             builder.setPositiveButton("Edit", (dialogInterface, i) -> {
                 if (title.length() == 0) {
@@ -77,14 +72,26 @@ public class SignatureActivity extends AppCompatActivity {
                 } else {
                     this.title = title.getText().toString().trim();
 
-                    switch (save) {
-                        case 0:
-                            saveAsBitmap(binding.signaturePad.getTransparentSignatureBitmap());
-                            break;
-                        case 1:
-                            saveAsPdf(binding.signaturePad.getTransparentSignatureBitmap());
-                            break;
-                    }
+                    Uri imageCache = saveAsBitmap(binding.signaturePad.getTransparentSignatureBitmap());
+
+                    UCrop.Options option = new UCrop.Options();
+
+                    option.setRootViewBackgroundColor(getResources().getColor(R.color.white));
+                    option.setCompressionFormat(Bitmap.CompressFormat.PNG);
+
+                    UCrop.of(imageCache, imageCache)
+                            .withOptions(option)
+                            .useSourceImageAspectRatio()
+                            .start(SignatureActivity.this);
+
+//                    switch (save) {
+//                        case 0:
+//                            saveAsBitmap(binding.signaturePad.getTransparentSignatureBitmap());
+//                            break;
+//                        case 1:
+//                            saveAsPdf(binding.signaturePad.getTransparentSignatureBitmap());
+//                            break;
+//                    }
                 }
             });
 
@@ -102,6 +109,12 @@ public class SignatureActivity extends AppCompatActivity {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.clear();
     }
 
     private Uri saveAsBitmap(Bitmap signatureBitmap) {
@@ -124,37 +137,37 @@ public class SignatureActivity extends AppCompatActivity {
         return Uri.fromFile(file);
     }
 
-    private void saveAsPdf(Bitmap transparentSignatureBitmap) {
-        String path = MainActivity.FOLDER_PATH + File.separator + title + ".pdf";
-
-        File file = new File(path);
-        if (file.exists())
-            Toast.makeText(this, "Name already exist", Toast.LENGTH_SHORT).show();
-        else
-            try {
-                Document document = new Document(PageSize.A4.rotate());
-
-                PdfWriter.getInstance(document, new FileOutputStream(path));
-
-                document.open();
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                transparentSignatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                Image image = Image.getInstance(stream.toByteArray());
-
-                document.setMargins(0, 0, 0, 0);
-
-                float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
-                        - document.rightMargin() - 0) / image.getWidth()) * 100;
-                image.scalePercent(scaler);
-                image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
-
-
-                document.add(image);
-                document.close();
-                Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
-            } catch (IOException | DocumentException e) {
-                Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
-            }
-    }
+//    private void saveAsPdf(Bitmap transparentSignatureBitmap) {
+//        String path = MainActivity.FOLDER_PATH + File.separator + title + ".pdf";
+//
+//        File file = new File(path);
+//        if (file.exists())
+//            Toast.makeText(this, "Name already exist", Toast.LENGTH_SHORT).show();
+//        else
+//            try {
+//                Document document = new Document(PageSize.A4.rotate());
+//
+//                PdfWriter.getInstance(document, new FileOutputStream(path));
+//
+//                document.open();
+//
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                transparentSignatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                Image image = Image.getInstance(stream.toByteArray());
+//
+//                document.setMargins(0, 0, 0, 0);
+//
+//                float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+//                        - document.rightMargin() - 0) / image.getWidth()) * 100;
+//                image.scalePercent(scaler);
+//                image.setAlignment(Image.ALIGN_CENTER | Image.ALIGN_TOP);
+//
+//
+//                document.add(image);
+//                document.close();
+//                Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
+//            } catch (IOException | DocumentException e) {
+//                Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
+//            }
+//    }
 }
