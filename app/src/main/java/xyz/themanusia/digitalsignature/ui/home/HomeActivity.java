@@ -17,8 +17,7 @@ import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
-    private HomeViewModel viewModel;
-//    private boolean isOpen = false;
+    //    private boolean isOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         viewModel.getAll().observe(this, pdfEntities -> {
             binding.rvPdf.setAdapter(new HomeAdapter(pdfEntities));

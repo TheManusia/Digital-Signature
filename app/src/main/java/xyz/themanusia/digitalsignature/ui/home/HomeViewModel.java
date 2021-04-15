@@ -12,12 +12,11 @@ import xyz.themanusia.digitalsignature.data.Repository;
 import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
 
 public class HomeViewModel extends AndroidViewModel {
-    private Repository repository;
     private final LiveData<List<PDFEntity>> pdfEntites;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
-        repository = new Repository(application);
+        Repository repository = new Repository(application);
         pdfEntites = repository.getAll();
     }
 

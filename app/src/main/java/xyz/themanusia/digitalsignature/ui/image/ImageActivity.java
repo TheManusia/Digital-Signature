@@ -15,18 +15,17 @@ import xyz.themanusia.digitalsignature.databinding.ActivityImageBinding;
 public class ImageActivity extends AppCompatActivity {
     public static final String URI_EXTRA = "uri_extra";
     private Uri imageUri;
-    private ActivityImageBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BigImageViewer.initialize(GlideImageLoader.with(getApplicationContext()));
-        binding = ActivityImageBinding.inflate(getLayoutInflater());
+        xyz.themanusia.digitalsignature.databinding.ActivityImageBinding binding = ActivityImageBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         if (getIntent() != null)
             imageUri = Uri.parse(getIntent().getStringExtra(URI_EXTRA));
-        BigImageView bigImageView = (BigImageView) findViewById(R.id.mBigImage);
+        BigImageView bigImageView = findViewById(R.id.mBigImage);
         bigImageView.showImage(imageUri);
     }
 }

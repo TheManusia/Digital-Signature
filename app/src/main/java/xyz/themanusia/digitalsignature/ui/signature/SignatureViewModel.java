@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import xyz.themanusia.digitalsignature.data.Repository;
-import xyz.themanusia.digitalsignature.data.room.AppDatabase;
 import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
 
 public class SignatureViewModel extends AndroidViewModel {

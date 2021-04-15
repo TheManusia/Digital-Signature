@@ -11,8 +11,8 @@ import xyz.themanusia.digitalsignature.data.room.dao.PDFDao;
 import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
 
 public class Repository {
-    private PDFDao pdfDao;
-    private LiveData<List<PDFEntity>> pdfEntities;
+    private final PDFDao pdfDao;
+    private final LiveData<List<PDFEntity>> pdfEntities;
 
     public Repository(Application application) {
         AppDatabase appDatabase = AppDatabase.getInstance(application);
