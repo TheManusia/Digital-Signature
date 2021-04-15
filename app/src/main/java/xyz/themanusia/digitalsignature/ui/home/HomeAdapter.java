@@ -19,48 +19,48 @@ import java.util.Date;
 import java.util.List;
 
 import xyz.themanusia.digitalsignature.R;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
-import xyz.themanusia.digitalsignature.databinding.PdfItemBinding;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
+import xyz.themanusia.digitalsignature.databinding.SignatureItemBinding;
 import xyz.themanusia.digitalsignature.tools.Tools;
 import xyz.themanusia.digitalsignature.ui.image.ImageActivity;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-    private final List<PDFEntity> pdfEntities = new ArrayList<>();
+    private final List<SignatureEntity> signatureEntities = new ArrayList<>();
     private final static String TAG = "HomeAdapter.class";
 
-    public HomeAdapter(List<PDFEntity> pdf) {
-        pdfEntities.addAll(pdf);
-        Log.e(TAG, "HomeAdapter: " + pdfEntities.isEmpty());
+    public HomeAdapter(List<SignatureEntity> signature) {
+        signatureEntities.addAll(signature);
+        Log.e(TAG, "HomeAdapter: " + signatureEntities.isEmpty());
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        PdfItemBinding itemBinding = PdfItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        SignatureItemBinding itemBinding = SignatureItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(itemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(pdfEntities.get(position));
+        holder.bind(signatureEntities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return pdfEntities.size();
+        return signatureEntities.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final PdfItemBinding binding;
+        private final SignatureItemBinding binding;
 
-        public ViewHolder(@NonNull PdfItemBinding itemView) {
+        public ViewHolder(@NonNull SignatureItemBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
         }
 
-        public void bind(PDFEntity pdfEntity) {
+        public void bind(SignatureEntity signatureEntity) {
 
-            Uri uri = Uri.parse(pdfEntity.getPath());
+            Uri uri = Uri.parse(signatureEntity.getPath());
             File dir = new File(uri.getPath());
             if (dir.exists()) {
                 long lastTime = dir.lastModified();

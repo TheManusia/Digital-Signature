@@ -8,14 +8,14 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 
 @Dao
-public interface PDFDao {
+public interface SignatureDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertPDF(PDFEntity pdfEntity);
+    void insertSignature(SignatureEntity signatureEntity);
 
-    @Query("SELECT * FROM PDF ORDER BY id DESC")
-    LiveData<List<PDFEntity>> getAll();
+    @Query("SELECT * FROM Signature ORDER BY id DESC")
+    LiveData<List<SignatureEntity>> getAll();
 }

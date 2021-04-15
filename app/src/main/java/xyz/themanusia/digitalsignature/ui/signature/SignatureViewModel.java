@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import xyz.themanusia.digitalsignature.data.Repository;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 
 public class SignatureViewModel extends AndroidViewModel {
     private final Repository repository;
@@ -16,7 +16,7 @@ public class SignatureViewModel extends AndroidViewModel {
         repository = new Repository(application);
     }
 
-    public void insertData(PDFEntity pdfEntity) {
-        repository.insert(pdfEntity);
+    public void insertData(SignatureEntity signatureEntity) {
+        repository.insert(signatureEntity);
     }
 }

@@ -9,10 +9,10 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import xyz.themanusia.digitalsignature.data.room.dao.PDFDao;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.dao.SignatureDao;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 
-@Database(entities = {PDFEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {SignatureEntity.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -23,13 +23,13 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "pdfdb").build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "signaturedb").build();
                 }
             }
         }
         return INSTANCE;
     }
 
-    public abstract PDFDao pdfDao();
+    public abstract SignatureDao signatureDao();
 
 }

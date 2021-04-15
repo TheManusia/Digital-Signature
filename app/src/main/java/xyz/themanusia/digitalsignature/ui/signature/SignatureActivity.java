@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 
 import xyz.themanusia.digitalsignature.MainActivity;
 import xyz.themanusia.digitalsignature.R;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 import xyz.themanusia.digitalsignature.databinding.ActivitySignatureBinding;
 
 public class SignatureActivity extends AppCompatActivity {
@@ -112,7 +112,7 @@ public class SignatureActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             if (data != null) {
                 Uri output = UCrop.getOutput(data);
-                PDFEntity entity = new PDFEntity();
+                SignatureEntity entity = new SignatureEntity();
                 if (output != null)
                     entity.setPath(output.toString());
                 insertToDB(entity);
@@ -123,7 +123,7 @@ public class SignatureActivity extends AppCompatActivity {
         }
     }
 
-    private void insertToDB(PDFEntity entity) {
+    private void insertToDB(SignatureEntity entity) {
         viewModel.insertData(entity);
     }
 

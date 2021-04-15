@@ -27,11 +27,11 @@ public class HomeActivity extends AppCompatActivity {
 
         HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-        viewModel.getAll().observe(this, pdfEntities -> {
-            binding.rvPdf.setAdapter(new HomeAdapter(pdfEntities));
-            binding.rvPdf.setVisibility(View.VISIBLE);
-            binding.rvPdf.setLayoutManager(new LinearLayoutManager(this));
-            binding.rvPdf.setHasFixedSize(true);
+        viewModel.getAll().observe(this, signatureEntities -> {
+            binding.rvSignature.setAdapter(new HomeAdapter(signatureEntities));
+            binding.rvSignature.setVisibility(View.VISIBLE);
+            binding.rvSignature.setLayoutManager(new LinearLayoutManager(this));
+            binding.rvSignature.setHasFixedSize(true);
         });
 
 //        binding.fbOpen.setOnClickListener(view -> {

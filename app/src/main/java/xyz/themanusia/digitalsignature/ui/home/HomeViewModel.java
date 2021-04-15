@@ -9,18 +9,18 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import xyz.themanusia.digitalsignature.data.Repository;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 
 public class HomeViewModel extends AndroidViewModel {
-    private final LiveData<List<PDFEntity>> pdfEntites;
+    private final LiveData<List<SignatureEntity>> signatureEntities;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
         Repository repository = new Repository(application);
-        pdfEntites = repository.getAll();
+        signatureEntities = repository.getAll();
     }
 
-    public LiveData<List<PDFEntity>> getAll() {
-        return pdfEntites;
+    public LiveData<List<SignatureEntity>> getAll() {
+        return signatureEntities;
     }
 }

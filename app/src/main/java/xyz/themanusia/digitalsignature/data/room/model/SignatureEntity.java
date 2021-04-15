@@ -13,8 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(tableName = "PDF")
-public class PDFEntity {
+@Entity(tableName = "Signature")
+public class SignatureEntity {
     @PrimaryKey(autoGenerate = true)
     int id;
 

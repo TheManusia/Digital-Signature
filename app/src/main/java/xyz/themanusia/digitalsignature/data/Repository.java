@@ -7,24 +7,24 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import xyz.themanusia.digitalsignature.data.room.AppDatabase;
-import xyz.themanusia.digitalsignature.data.room.dao.PDFDao;
-import xyz.themanusia.digitalsignature.data.room.model.PDFEntity;
+import xyz.themanusia.digitalsignature.data.room.dao.SignatureDao;
+import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 
 public class Repository {
-    private final PDFDao pdfDao;
-    private final LiveData<List<PDFEntity>> pdfEntities;
+    private final SignatureDao signatureDao;
+    private final LiveData<List<SignatureEntity>> signatureEntities;
 
     public Repository(Application application) {
         AppDatabase appDatabase = AppDatabase.getInstance(application);
-        pdfDao = appDatabase.pdfDao();
-        pdfEntities = pdfDao.getAll();
+        signatureDao = appDatabase.signatureDao();
+        signatureEntities = signatureDao.getAll();
     }
 
-    public LiveData<List<PDFEntity>> getAll() {
-        return pdfEntities;
+    public LiveData<List<SignatureEntity>> getAll() {
+        return signatureEntities;
     }
 
-    public void insert(PDFEntity pdfEntity) {
-        AppDatabase.databaseWriteExecutor.execute(() -> pdfDao.insertPDF(pdfEntity));
+    public void insert(SignatureEntity signatureEntity) {
+        AppDatabase.databaseWriteExecutor.execute(() -> signatureDao.insertSignature(signatureEntity));
     }
 }
