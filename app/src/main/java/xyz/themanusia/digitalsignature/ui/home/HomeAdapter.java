@@ -62,27 +62,32 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             Uri uri = Uri.parse(pdfEntity.getPath());
             File dir = new File(uri.getPath());
-            long lastTime = dir.lastModified();
-            String dateString = DateFormat.format("dd MMMM yyyy", new Date(lastTime)).toString();
-            String name = dir.getName();
-            long size = dir.length();
+            if (dir.exists()) {
+                long lastTime = dir.lastModified();
+                String dateString = DateFormat.format("dd MMMM yyyy hh:mm a", new Date(lastTime)).toString();
+                String name = dir.getName();
+                long size = dir.length();
 
-            binding.tvTitle.setText(name);
-            binding.tvInfo.setText(String.format(binding.getRoot().getContext().getResources().getString(R.string.path),
-                    Tools.readableFileSize(size),
-                    dateString
-            ));
+                binding.tvTitle.setText(name);
+                binding.tvInfo.setText(String.format(binding.getRoot().getContext().getResources().getString(R.string.path),
+                        Tools.readableFileSize(size),
+                        dateString
+                ));
 
-            Glide.with(binding.getRoot())
-                    .load(uri)
-                    .apply(new RequestOptions().override(64, 64))
-                    .into(binding.imageView);
+                Glide.with(binding.getRoot())
+                        .load(uri)
+                        .apply(new RequestOptions().override(64, 64))
+                        .into(binding.imageView);
 
-            itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), ImageActivity.class);
-                intent.putExtra(ImageActivity.URI_EXTRA, uri.toString());
-                itemView.getContext().startActivity(intent);
-            });
+                itemView.setOnClickListener(view -> {
+                    Intent intent = new Intent(itemView.getContext(), ImageActivity.class);
+                    intent.putExtra(ImageActivity.URI_EXTRA, uri.toString());
+                    itemView.getContext().startActivity(intent);
+                });
+            } else {
+                binding.tvTitle.setText(R.string.file_not_found);
+                binding.tvInfo.setText(uri.getPath());
+            }
         }
     }
 }

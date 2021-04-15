@@ -16,6 +16,6 @@ public interface PDFDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertPDF(PDFEntity pdfEntity);
 
-    @Query("SELECT * FROM PDF")
+    @Query("SELECT * FROM PDF ORDER BY id DESC")
     LiveData<List<PDFEntity>> getAll();
 }
