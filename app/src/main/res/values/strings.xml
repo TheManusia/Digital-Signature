@@ -16,4 +16,6 @@
     <string name="success_save">Success to save file</string>
     <string name="failed_save">Failed to save file</string>
     <string name="name_exist">Name already exist</string>
+    <string name="new_file">New File</string>
+    <string name="open">Open</string>
 </resources>
