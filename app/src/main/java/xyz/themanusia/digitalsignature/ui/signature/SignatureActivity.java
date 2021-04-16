@@ -63,16 +63,16 @@ public class SignatureActivity extends AppCompatActivity {
 
         binding.btnSave.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Save");
+            builder.setTitle(R.string.save);
 //            String[] item = {"PNG", "PDF"};
             final EditText title = new EditText(this);
             builder.setView(title);
-            title.setHint("Title");
+            title.setHint(getResources().getString(R.string.insert_title));
 //            builder.setSingleChoiceItems(item, 0, (dialogInterface, i) -> save = i);
 
-            builder.setPositiveButton("Edit", (dialogInterface, i) -> {
+            builder.setPositiveButton(getResources().getString(R.string.edit), (dialogInterface, i) -> {
                 if (title.length() == 0) {
-                    Toast.makeText(this, "Insert Title!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.title_warning), Toast.LENGTH_SHORT).show();
                     dialogInterface.cancel();
                 } else {
                     this.title = title.getText().toString().trim();
@@ -100,7 +100,7 @@ public class SignatureActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel());
+            builder.setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.cancel());
 
             builder.show();
         });
@@ -117,9 +117,9 @@ public class SignatureActivity extends AppCompatActivity {
                     entity.setPath(output.toString());
                 insertToDB(entity);
             }
-            Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.success_save), Toast.LENGTH_SHORT).show();
         } else if (resultCode == UCrop.RESULT_ERROR) {
-            Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.failed_save), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -138,16 +138,16 @@ public class SignatureActivity extends AppCompatActivity {
 
         File file = new File(path);
         if (file.exists())
-            Toast.makeText(this, "Name already exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.name_exist), Toast.LENGTH_SHORT).show();
         else
             try {
                 FileOutputStream out = new FileOutputStream(file);
                 signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                 out.flush();
                 out.close();
-                Toast.makeText(this, "Success to save file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.success_save), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Toast.makeText(this, "Failed to save file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.failed_save), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         return Uri.fromFile(file);

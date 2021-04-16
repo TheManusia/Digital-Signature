@@ -26,7 +26,7 @@ import xyz.themanusia.digitalsignature.ui.image.ImageActivity;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private final List<SignatureEntity> signatureEntities = new ArrayList<>();
-    private final static String TAG = "HomeAdapter.class";
+    private final static String TAG = HomeAdapter.class.getSimpleName();
 
     public HomeAdapter(List<SignatureEntity> signature) {
         signatureEntities.addAll(signature);

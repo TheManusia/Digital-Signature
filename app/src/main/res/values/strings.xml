@@ -9,4 +9,11 @@
     <string name="title">Title</string>
     <string name="path">%s %s</string>
     <string name="file_not_found">File not found</string>
+    <string name="insert_title">Insert Title Here</string>
+    <string name="edit">Edit</string>
+    <string name="title_warning">Insert Title!</string>
+    <string name="cancel">Cancel</string>
+    <string name="success_save">Success to save file</string>
+    <string name="failed_save">Failed to save file</string>
+    <string name="name_exist">Name already exist</string>
 </resources>

@@ -1,18 +1,14 @@
 package xyz.themanusia.digitalsignature.ui.home;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import xyz.themanusia.digitalsignature.databinding.ActivityHomeBinding;
-import xyz.themanusia.digitalsignature.ui.pdf.PdfActivity;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -52,20 +48,20 @@ public class HomeActivity extends AppCompatActivity {
 //      }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri pdfUri = data.getData();
-                Intent intent = new Intent(this, PdfActivity.class);
-                intent.putExtra(PdfActivity.PDF_URI, pdfUri.toString());
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "Can't Open File", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK) {
+//            if (data != null) {
+//                Uri pdfUri = data.getData();
+//                Intent intent = new Intent(this, PdfActivity.class);
+//                intent.putExtra(PdfActivity.PDF_URI, pdfUri.toString());
+//                startActivity(intent);
+//            } else {
+//                Toast.makeText(this, "Can't Open File", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 //    @Override
 //    public void onBackPressed() {
