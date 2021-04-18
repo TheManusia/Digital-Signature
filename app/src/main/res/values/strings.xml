@@ -18,4 +18,5 @@
     <string name="name_exist">Name already exist</string>
     <string name="new_file">New File</string>
     <string name="open">Open</string>
+    <string name="add_signature">Add Signature</string>
 </resources>

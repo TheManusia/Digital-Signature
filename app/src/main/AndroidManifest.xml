@@ -5,8 +5,8 @@
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"
-        android:maxSdkVersion="29" />
+        android:maxSdkVersion="29"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -29,7 +29,7 @@
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.FullScreen" />
         <activity
             android:name=".ui.pdf.PdfActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity
             android:name=".MainActivity"

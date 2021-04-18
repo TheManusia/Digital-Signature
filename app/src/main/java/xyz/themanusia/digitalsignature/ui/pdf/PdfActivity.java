@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
 
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
@@ -22,6 +26,7 @@ public class PdfActivity extends AppCompatActivity {
     private Uri pdfUri;
     private int currentPage;
     private int pageCount;
+    private boolean isShow = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +49,43 @@ public class PdfActivity extends AppCompatActivity {
             finish();
         }
 
+        File dir = new File(pdfUri.getPath());
+
+        binding.topAppBar.setTitle(dir.getName());
+
+        binding.fbPdf.setOnClickListener(view ->
+                Toast.makeText(this, "Replace with your own action", Toast.LENGTH_SHORT).show());
+
         binding.clipArt.setVisibility(View.GONE);
 
         binding.pdfView.fromUri(pdfUri)
                 .enableSwipe(true)
                 .spacing(8)
                 .onPageScroll((page, positionOffset) -> {
-                    binding.tvPage.startAnimation(out);
-                    binding.tvPage.setVisibility(View.INVISIBLE);
+                    if (isShow) {
+                        binding.tvPage.startAnimation(out);
+                        binding.tvPage.setVisibility(View.INVISIBLE);
+                        binding.bottomAppBar.animate().translationY(binding.bottomAppBar.getBottom())
+                                .setInterpolator(new AccelerateInterpolator()).start();
+                        binding.topAppBar.animate().translationY(-binding.topAppBar.getBottom())
+                                .setInterpolator(new AccelerateInterpolator()).start();
+                        binding.fbPdf.animate().translationY(binding.fbPdf.getBottom())
+                                .setInterpolator(new AccelerateInterpolator()).start();
+                        isShow = false;
+                    }
                 })
                 .onTap(e -> {
-                    binding.tvPage.startAnimation(in);
-                    binding.tvPage.setVisibility(View.VISIBLE);
+                    if (!isShow) {
+                        binding.tvPage.startAnimation(in);
+                        binding.tvPage.setVisibility(View.VISIBLE);
+                        binding.bottomAppBar.animate().translationY(0)
+                                .setInterpolator(new DecelerateInterpolator()).start();
+                        binding.topAppBar.animate().translationY(0)
+                                .setInterpolator(new DecelerateInterpolator()).start();
+                        binding.fbPdf.animate().translationY(0)
+                                .setInterpolator(new DecelerateInterpolator()).start();
+                        isShow = true;
+                    }
                     return true;
                 })
                 .onPageChange((page, positionOffset) -> {
@@ -63,6 +93,7 @@ public class PdfActivity extends AppCompatActivity {
                     pageCount = binding.pdfView.getPageCount();
                     String pages = String.format(getString(R.string.page), page + 1, binding.pdfView.getPageCount());
                     binding.tvPage.setText(pages);
+                    binding.tvPage.startAnimation(out);
                 })
                 .load();
 
