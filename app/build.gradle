@@ -54,12 +54,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
-    implementation 'com.github.piasy.BigImageViewer:BigImageViewer:1.7.1'
-    implementation 'com.github.piasy.BigImageViewer:GlideImageLoader:1.7.1'
+    def imageviewer_version = "1.7.1"
+    implementation "com.github.piasy.BigImageViewer:BigImageViewer:$imageviewer_version"
+    implementation "com.github.piasy.BigImageViewer:GlideImageLoader:$imageviewer_version"
+
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.github.gcacace:signature-pad:1.3.1'
-    implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.github.yalantis:ucrop:2.2.6'
+    implementation 'com.tom_roush:pdfbox-android:1.8.10.3'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
