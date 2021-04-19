@@ -21,6 +21,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String FOLDER_PATH = Environment.getExternalStorageDirectory() + File.separator + "DigitalSignature";
+    private static final String CACHE_PATH = FOLDER_PATH + File.separator + "cache";
     private static final String[] PERMISSION = new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE};
     private static final int PERMISSION_CODE = 1;
 
@@ -44,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         File folder = new File(FOLDER_PATH);
+        File cache = new File(CACHE_PATH);
 
-        if (!folder.exists())
-            if (folder.mkdirs())
+        if (!folder.exists() || !cache.exists())
+            if (folder.mkdirs() || cache.mkdirs())
                 Log.e(TAG, "onRequestPermissionsResult: Folder Created");
             else
                 Log.e(TAG, "onRequestPermissionsResult: Failed " + FOLDER_PATH);

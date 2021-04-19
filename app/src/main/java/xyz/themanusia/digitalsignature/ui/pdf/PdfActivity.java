@@ -1,6 +1,9 @@
 package xyz.themanusia.digitalsignature.ui.pdf;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,35 +15,35 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.barteksc.pdfviewer.util.FitPolicy;
 
 import java.io.File;
 
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
+import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
     public static final String PDF_URI = "PDF_URI";
+    public static final String SIGNATURE_BITMAP = "SIGNATURE_BITMAP";
+    private static final int SIGNATURE_REQUEST_CODE = 42069;
+    private Bitmap signatureBitmap;
     private Uri pdfUri;
     private int currentPage;
     private int pageCount;
     private boolean isShow = true;
+    private File dir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPdfBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        AlphaAnimation out = new AlphaAnimation(1.0f, 0.0f);
-        out.setDuration(1000);
-        out.setRepeatMode(Animation.REVERSE);
-
-        AlphaAnimation in = new AlphaAnimation(0.0f, 1.0f);
-        in.setDuration(1000);
-        in.setRepeatMode(Animation.REVERSE);
 
         if (getIntent().getExtras() != null)
             pdfUri = Uri.parse(getIntent().getStringExtra(PDF_URI));
@@ -49,18 +52,45 @@ public class PdfActivity extends AppCompatActivity {
             finish();
         }
 
-        File dir = new File(pdfUri.getPath());
+        dir = new File(pdfUri.getPath());
+
+        init();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SIGNATURE_REQUEST_CODE)
+            if (resultCode == RESULT_OK)
+                signatureBitmap = data.getParcelableExtra(SIGNATURE_BITMAP);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void init() {
+        AlphaAnimation out = new AlphaAnimation(1.0f, 0.0f);
+        out.setDuration(1000);
+        out.setRepeatMode(Animation.REVERSE);
+
+        AlphaAnimation in = new AlphaAnimation(0.0f, 1.0f);
+        in.setDuration(1000);
+        in.setRepeatMode(Animation.REVERSE);
 
         binding.topAppBar.setTitle(dir.getName());
 
-        binding.fbPdf.setOnClickListener(view ->
-                Toast.makeText(this, "Replace with your own action", Toast.LENGTH_SHORT).show());
-
-        binding.clipArt.setVisibility(View.GONE);
+        binding.fbPdf.setOnClickListener(view -> {
+            Intent signature = new Intent(PdfActivity.this, SignatureActivity.class);
+            startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
+        });
 
         binding.pdfView.fromUri(pdfUri)
                 .enableSwipe(true)
-                .spacing(8)
+                .enableDoubletap(false)
+                .swipeHorizontal(true)
+                .scrollHandle(null)
+                .pageFling(true)
+                .pageFitPolicy(FitPolicy.BOTH)
+                .fitEachPage(true)
+                .autoSpacing(true)
                 .onPageScroll((page, positionOffset) -> {
                     if (isShow) {
                         binding.tvPage.startAnimation(out);
@@ -96,6 +126,8 @@ public class PdfActivity extends AppCompatActivity {
                     binding.tvPage.startAnimation(out);
                 })
                 .load();
+        binding.pdfView.setMaxZoom(1);
+        binding.pdfView.setMinZoom(1);
 
         binding.tvPage.setOnClickListener(view -> showDialogPage());
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import xyz.themanusia.digitalsignature.MainActivity;
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.data.room.model.SignatureEntity;
 import xyz.themanusia.digitalsignature.databinding.ActivitySignatureBinding;
+import xyz.themanusia.digitalsignature.ui.pdf.PdfActivity;
 
 public class SignatureActivity extends AppCompatActivity {
     private ActivitySignatureBinding binding;
@@ -102,7 +104,14 @@ public class SignatureActivity extends AppCompatActivity {
 
             builder.setNegativeButton(getResources().getString(R.string.cancel), (dialogInterface, i) -> dialogInterface.cancel());
 
-            builder.show();
+            if (getCallingActivity() == null)
+                builder.show();
+            else {
+                Intent result = new Intent();
+                result.putExtra(PdfActivity.SIGNATURE_BITMAP, binding.signaturePad.getTransparentSignatureBitmap(true));
+                setResult(RESULT_OK, result);
+                finish();
+            }
         });
     }
 
@@ -115,6 +124,7 @@ public class SignatureActivity extends AppCompatActivity {
                 SignatureEntity entity = new SignatureEntity();
                 if (output != null)
                     entity.setPath(output.toString());
+
                 insertToDB(entity);
             }
             Toast.makeText(this, getResources().getString(R.string.success_save), Toast.LENGTH_SHORT).show();
@@ -135,6 +145,12 @@ public class SignatureActivity extends AppCompatActivity {
 
     private Uri saveAsBitmap(Bitmap signatureBitmap) {
         String path = MainActivity.FOLDER_PATH + File.separator + title + ".png";
+        if (getCallingActivity() != null) {
+            path = MainActivity.FOLDER_PATH + File.separator + "cache" + File.separator + Math.random() + ".png";
+            while (new File(path).exists()) {
+                path = MainActivity.FOLDER_PATH + File.separator + "cache" + File.separator + Math.random() + ".png";
+            }
+        }
 
         File file = new File(path);
         if (file.exists())

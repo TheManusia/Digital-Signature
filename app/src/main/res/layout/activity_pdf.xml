@@ -18,11 +18,18 @@
         android:layout_height="match_parent"
         android:background="@color/black" />
 
-    <xyz.themanusia.digitalsignature.ui.clipart.ClipArt
-        android:id="@+id/clipArt"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="invisible" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/imageSign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
