@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         File folder = new File(FOLDER_PATH);
         File cache = new File(CACHE_PATH);
 
-        if (!folder.exists() || !cache.exists())
+        if (!folder.exists() && !cache.exists())
             if (folder.mkdirs() || cache.mkdirs())
                 Log.e(TAG, "onRequestPermissionsResult: Folder Created");
             else

@@ -2,10 +2,13 @@ package xyz.themanusia.digitalsignature.ui.pdf;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -19,15 +22,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.rendering.PDFRenderer;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
+import xyz.themanusia.digitalsignature.tools.Tools;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class PdfActivity extends AppCompatActivity {
+    private static final String TAG = PdfActivity.class.getSimpleName();
     private ActivityPdfBinding binding;
     public static final String PDF_URI = "PDF_URI";
     public static final String SIGNATURE_BITMAP = "SIGNATURE_BITMAP";
@@ -38,12 +47,19 @@ public class PdfActivity extends AppCompatActivity {
     private int pageCount;
     private boolean isShow = true;
     private File dir;
+    private int x = 0, pageNumber = 1, totalNumberOfPages;
+    private Bitmap pageImage;
+    private File directory, generatedImagesPath;
+    private ContextWrapper contextWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPdfBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        contextWrapper = new ContextWrapper(this);
+        directory = contextWrapper.getDir("PdfData", Context.MODE_PRIVATE);
 
         if (getIntent().getExtras() != null)
             pdfUri = Uri.parse(getIntent().getStringExtra(PDF_URI));
@@ -62,7 +78,8 @@ public class PdfActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SIGNATURE_REQUEST_CODE)
             if (resultCode == RESULT_OK)
-                signatureBitmap = data.getParcelableExtra(SIGNATURE_BITMAP);
+                if (data != null)
+                    signatureBitmap = data.getParcelableExtra(SIGNATURE_BITMAP);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -82,6 +99,7 @@ public class PdfActivity extends AppCompatActivity {
             startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
         });
 
+        pdfToImage();
         binding.pdfView.fromUri(pdfUri)
                 .enableSwipe(true)
                 .enableDoubletap(false)
@@ -124,6 +142,11 @@ public class PdfActivity extends AppCompatActivity {
                     String pages = String.format(getString(R.string.page), page + 1, binding.pdfView.getPageCount());
                     binding.tvPage.setText(pages);
                     binding.tvPage.startAnimation(out);
+
+                    pageNumber = page + 1;
+                    generatedImagesPath = new File(directory, "1" + ".png");
+                    if (generatedImagesPath.exists())
+                        binding.imageSign.setImageURI(Uri.fromFile(generatedImagesPath));
                 })
                 .load();
         binding.pdfView.setMaxZoom(1);
@@ -163,5 +186,38 @@ public class PdfActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void pdfToImage() {
+        FileOutputStream fileOut;
+        try {
+            File file = new File(Tools.getPath(this, pdfUri));
+            PDDocument document = PDDocument.load(file);
+            PDFRenderer renderer = new PDFRenderer(document);
+            for (int i = 0; document.getNumberOfPages() > i; i++) {
+                x++;
+                pageImage = renderer.renderImage(i, 1, Bitmap.Config.RGB_565);
+                generatedImagesPath = new File(directory, x + ".png");
+                fileOut = new FileOutputStream(generatedImagesPath);
+                pageImage.compress(Bitmap.CompressFormat.PNG, 100, fileOut);
+                fileOut.close();
+            }
+            totalNumberOfPages = x;
+            document.close();
+            displayGeneratedImage();
+        } catch (IOException e) {
+            Log.e("PdfBox-Android-Sample", "Exception thrown while rendering file", e);
+        }
+    }
+
+    private void displayGeneratedImage() {
+        Log.e(TAG, "displayGeneratedImage: run");
+        generatedImagesPath = new File(directory, "1" + ".png");
+        Uri pathUri = Uri.parse(generatedImagesPath.toString());
+        new Thread() {
+            public void run() {
+                runOnUiThread(() -> binding.imageSign.setImageURI(pathUri));
+            }
+        }.start();
     }
 }
