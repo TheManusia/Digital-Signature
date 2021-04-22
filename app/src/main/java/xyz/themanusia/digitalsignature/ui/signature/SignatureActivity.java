@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -108,7 +108,13 @@ public class SignatureActivity extends AppCompatActivity {
                 builder.show();
             else {
                 Intent result = new Intent();
-                result.putExtra(PdfActivity.SIGNATURE_BITMAP, binding.signaturePad.getTransparentSignatureBitmap(true));
+                Bitmap bmp = binding.signaturePad.getTransparentSignatureBitmap(true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                bmp.recycle();
+
+                result.putExtra(PdfActivity.SIGNATURE_BITMAP, byteArray);
                 setResult(RESULT_OK, result);
                 finish();
             }

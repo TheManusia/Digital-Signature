@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,7 +68,8 @@ public class PdfActivity extends AppCompatActivity {
         if (requestCode == SIGNATURE_REQUEST_CODE)
             if (resultCode == RESULT_OK)
                 if (data != null) {
-                    Bitmap signatureBitmap = data.getParcelableExtra(SIGNATURE_BITMAP);
+                    byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
+                    Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
                     binding.clipArt.setImageBitmap(signatureBitmap);
                     binding.clipArt.setVisibility(View.VISIBLE);
                 }
