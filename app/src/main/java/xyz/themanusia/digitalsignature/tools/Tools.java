@@ -74,7 +74,7 @@ public class Tools {
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
             String path = getPath(context, uri);
-            if (path != null && isLocal(path)) {
+            if (isLocal(path)) {
                 return new File(path);
             }
         }
@@ -186,13 +186,13 @@ public class Tools {
                 };
 
                 for (String contentUriPrefix : contentUriPrefixesToTry) {
-                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
+                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
                     try {
                         String path = getDataColumn(context, contentUri, null, null);
                         if (path != null) {
                             return path;
                         }
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 

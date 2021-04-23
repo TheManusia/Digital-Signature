@@ -45,12 +45,12 @@ public abstract class MotionEntity {
      * width of canvas the entity is drawn in
      */
     @IntRange(from = 0)
-    protected int canvasWidth;
+    protected final int canvasWidth;
     /**
      * height of canvas the entity is drawn in
      */
     @IntRange(from = 0)
-    protected int canvasHeight;
+    protected final int canvasHeight;
 
     /**
      * Destination points of the entity

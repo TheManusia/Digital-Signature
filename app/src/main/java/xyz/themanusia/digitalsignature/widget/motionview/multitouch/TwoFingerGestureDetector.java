@@ -31,8 +31,6 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
     protected float mPrevFingerDiffY;
     protected float mCurrFingerDiffX;
     protected float mCurrFingerDiffY;
-    private float mRightSlopEdge;
-    private float mBottomSlopEdge;
     private float mCurrLen;
     private float mPrevLen;
 
@@ -118,8 +116,8 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
     protected boolean isSloppyGesture(MotionEvent event) {
         // As orientation can change, query the metrics in touch down
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        mRightSlopEdge = metrics.widthPixels - mEdgeSlop;
-        mBottomSlopEdge = metrics.heightPixels - mEdgeSlop;
+        float mRightSlopEdge = metrics.widthPixels - mEdgeSlop;
+        float mBottomSlopEdge = metrics.heightPixels - mEdgeSlop;
 
         final float edgeSlop = mEdgeSlop;
         final float rightSlop = mRightSlopEdge;
@@ -127,8 +125,8 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
 
         final float x0 = event.getRawX();
         final float y0 = event.getRawY();
-        final float x1 = getRawX(event, 1);
-        final float y1 = getRawY(event, 1);
+        final float x1 = getRawX(event);
+        final float y1 = getRawY(event);
 
         boolean p0sloppy = x0 < edgeSlop || y0 < edgeSlop
                 || x0 > rightSlop || y0 > bottomSlop;
@@ -139,23 +137,19 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
             return true;
         } else if (p0sloppy) {
             return true;
-        } else if (p1sloppy) {
-            return true;
-        }
-        return false;
+        } else return p1sloppy;
     }
 
     /**
      * MotionEvent has no getRawX(int) method; simulate it pending future API approval.
      *
      * @param event
-     * @param pointerIndex
      * @return
      */
-    protected static float getRawX(MotionEvent event, int pointerIndex) {
+    protected static float getRawX(MotionEvent event) {
         float offset = event.getX() - event.getRawX();
-        if (pointerIndex < event.getPointerCount()) {
-            return event.getX(pointerIndex) + offset;
+        if (1 < event.getPointerCount()) {
+            return event.getX(1) + offset;
         }
         return 0f;
     }
@@ -164,13 +158,12 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
      * MotionEvent has no getRawY(int) method; simulate it pending future API approval.
      *
      * @param event
-     * @param pointerIndex
      * @return
      */
-    protected static float getRawY(MotionEvent event, int pointerIndex) {
+    protected static float getRawY(MotionEvent event) {
         float offset = event.getY() - event.getRawY();
-        if (pointerIndex < event.getPointerCount()) {
-            return event.getY(pointerIndex) + offset;
+        if (1 < event.getPointerCount()) {
+            return event.getY(1) + offset;
         }
         return 0f;
     }

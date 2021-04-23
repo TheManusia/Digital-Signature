@@ -23,6 +23,7 @@ import androidx.core.view.GestureDetectorCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.widget.motionview.model.MotionEntity;
 import xyz.themanusia.digitalsignature.widget.motionview.multitouch.MoveGestureDetector;
@@ -41,8 +42,10 @@ public class MotionView extends FrameLayout {
     }
 
     // layers
+    @Getter
     private final List<MotionEntity> entities = new ArrayList<>();
     @Nullable
+    @Getter
     private MotionEntity selectedEntity;
 
     private Paint selectedLayerPaint;
@@ -97,14 +100,6 @@ public class MotionView extends FrameLayout {
         setOnTouchListener(onTouchListener);
 
         updateUI();
-    }
-
-    public MotionEntity getSelectedEntity() {
-        return selectedEntity;
-    }
-
-    public List<MotionEntity> getEntities() {
-        return entities;
     }
 
     public void setMotionViewCallback(@Nullable MotionViewCallback callback) {

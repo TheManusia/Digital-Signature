@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 public class ImageEntity extends MotionEntity {
 
     @NonNull
+    final
     Bitmap bitmap;
 
     public ImageEntity(@NonNull Layer layer,

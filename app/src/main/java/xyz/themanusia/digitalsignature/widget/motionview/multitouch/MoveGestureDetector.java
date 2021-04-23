@@ -27,9 +27,7 @@ import android.view.MotionEvent;
 public class MoveGestureDetector extends BaseGestureDetector {
     private static final PointF FOCUS_DELTA_ZERO = new PointF();
     private final OnMoveGestureListener mListener;
-    private PointF mCurrFocusInternal;
-    private PointF mPrevFocusInternal;
-    private PointF mFocusExternal = new PointF();
+    private final PointF mFocusExternal = new PointF();
     private PointF mFocusDeltaExternal = new PointF();
 
     public MoveGestureDetector(Context context, OnMoveGestureListener listener) {
@@ -87,8 +85,8 @@ public class MoveGestureDetector extends BaseGestureDetector {
         final MotionEvent prev = mPrevEvent;
 
         // Focus intenal
-        mCurrFocusInternal = determineFocalPoint(curr);
-        mPrevFocusInternal = determineFocalPoint(prev);
+        PointF mCurrFocusInternal = determineFocalPoint(curr);
+        PointF mPrevFocusInternal = determineFocalPoint(prev);
 
         // Focus external
         // - Prevent skipping of focus delta when a finger is added or removed
@@ -142,11 +140,11 @@ public class MoveGestureDetector extends BaseGestureDetector {
      * @see MoveGestureDetector.SimpleOnMoveGestureListener
      */
     public interface OnMoveGestureListener {
-        public boolean onMove(MoveGestureDetector detector);
+        boolean onMove(MoveGestureDetector detector);
 
-        public boolean onMoveBegin(MoveGestureDetector detector);
+        boolean onMoveBegin(MoveGestureDetector detector);
 
-        public void onMoveEnd(MoveGestureDetector detector);
+        void onMoveEnd(MoveGestureDetector detector);
     }
 
     /**
