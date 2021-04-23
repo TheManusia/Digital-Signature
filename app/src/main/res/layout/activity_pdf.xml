@@ -18,12 +18,18 @@
         android:layout_height="match_parent"
         android:background="@color/white" />
 
-    <xyz.themanusia.digitalsignature.ui.clipart.ClipArt
-        android:id="@+id/clipArt"
+    <xyz.themanusia.digitalsignature.widget.motionview.MotionView
+        android:id="@+id/motionView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:visibility="invisible" />
+
+    <!--    <xyz.themanusia.digitalsignature.widget.clipart.ClipArt-->
+    <!--        android:id="@+id/clipArt"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:visibility="invisible" />-->
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

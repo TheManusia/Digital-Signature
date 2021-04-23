@@ -1,4 +1,4 @@
-package xyz.themanusia.digitalsignature.ui.clipart;
+package xyz.themanusia.digitalsignature.widget.clipart;
 
 /*
 src: https://stackoverflow.com/questions/22011259/move-drag-zoom-an-imageview-in-android

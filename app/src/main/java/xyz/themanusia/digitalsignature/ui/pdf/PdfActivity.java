@@ -31,6 +31,10 @@ import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
+import xyz.themanusia.digitalsignature.widget.motionview.MotionView;
+import xyz.themanusia.digitalsignature.widget.motionview.model.ImageEntity;
+import xyz.themanusia.digitalsignature.widget.motionview.model.Layer;
+import xyz.themanusia.digitalsignature.widget.motionview.model.MotionEntity;
 
 public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
@@ -70,8 +74,13 @@ public class PdfActivity extends AppCompatActivity {
                 if (data != null) {
                     byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
                     Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
-                    binding.clipArt.setImageBitmap(signatureBitmap);
-                    binding.clipArt.setVisibility(View.VISIBLE);
+                    ImageEntity entity = new ImageEntity(new Layer(), signatureBitmap, binding.motionView.getWidth(), binding.motionView.getHeight());
+                    binding.motionView.post(() -> {
+                        binding.motionView.addEntityAndPosition(entity);
+                        binding.motionView.setVisibility(View.VISIBLE);
+                    });
+//                    binding.clipArt.setImageBitmap(signatureBitmap);
+//                    binding.clipArt.setVisibility(View.VISIBLE);
                 }
     }
 
@@ -145,15 +154,25 @@ public class PdfActivity extends AppCompatActivity {
                     SizeF size = binding.pdfView.getPageSize(page);
                     float pageHeight = size.getHeight();
                     float pageWidth = size.getWidth();
-                    ViewGroup.LayoutParams layoutParams = binding.clipArt.getLayoutParams();
+                    ViewGroup.LayoutParams layoutParams = binding.motionView.getLayoutParams();
                     layoutParams.height = (int) pageHeight;
                     layoutParams.width = (int) pageWidth;
-                    binding.clipArt.setLayoutParams(layoutParams);
+                    binding.motionView.setLayoutParams(layoutParams);
                     Log.d(TAG, "init: pageHeight= " + pageHeight + " pageWidth= " + pageWidth);
                 })
                 .load();
         binding.pdfView.setMaxZoom(1);
         binding.pdfView.setMinZoom(1);
+
+        binding.motionView.setMotionViewCallback(new MotionView.MotionViewCallback() {
+            @Override
+            public void onEntitySelected(@Nullable MotionEntity entity) {
+            }
+
+            @Override
+            public void onEntityDoubleTap(@NonNull MotionEntity entity) {
+            }
+        });
 
         binding.tvPage.setOnClickListener(view -> showDialogPage());
     }
