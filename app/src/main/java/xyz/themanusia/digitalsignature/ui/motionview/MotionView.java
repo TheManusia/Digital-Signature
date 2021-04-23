@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -25,11 +26,13 @@ import java.util.List;
 
 import lombok.Getter;
 import xyz.themanusia.digitalsignature.R;
+import xyz.themanusia.digitalsignature.ui.motionview.model.Layer;
 import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.MoveGestureDetector;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.RotateGestureDetector;
 
 public class MotionView extends FrameLayout {
+    private static final String TAG = MotionView.class.getSimpleName();
 
     public interface Constants {
         float SELECTED_LAYER_ALPHA = 0.15F;
@@ -205,6 +208,10 @@ public class MotionView extends FrameLayout {
         }
     }
 
+    public Layer getSelectedEntityLayer() {
+        return selectedEntity.getLayer();
+    }
+
     private void initialTranslateAndScale(@NonNull MotionEntity entity) {
         entity.moveToCanvasCenter();
         entity.getLayer().setScale(entity.getLayer().initialScale());
@@ -318,6 +325,8 @@ public class MotionView extends FrameLayout {
                 moveGestureDetector.onTouchEvent(event);
                 gestureDetectorCompat.onTouchEvent(event);
             }
+            if (getSelectedEntity() != null)
+                Log.e(TAG, "findEntityAtPoint: X= " + getSelectedEntity().absoluteCenterX() + ", Y= " + getSelectedEntity().absoluteCenterY());
             return true;
         }
     };

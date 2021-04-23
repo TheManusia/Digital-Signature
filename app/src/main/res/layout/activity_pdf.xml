@@ -16,12 +16,13 @@
         android:id="@+id/pdfView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:background="@color/black" />
 
     <xyz.themanusia.digitalsignature.ui.motionview.MotionView
         android:id="@+id/motionView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:visibility="invisible" />
 
     <!--    <xyz.themanusia.digitalsignature.widget.clipart.ClipArt-->

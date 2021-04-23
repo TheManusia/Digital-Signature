@@ -130,7 +130,7 @@ public class PdfActivity extends AppCompatActivity {
                     }
                 })
                 .onTap(e -> {
-                    Log.d(TAG, "init: pdfRawY= " + e.getRawY() + " pdfRawX= " + e.getRawX());
+                    Log.d(TAG, "init: pdfY= " + e.getY() + " pdfX= " + e.getX());
                     if (!isShow) {
                         binding.tvPage.startAnimation(in);
                         binding.tvPage.setVisibility(View.VISIBLE);
