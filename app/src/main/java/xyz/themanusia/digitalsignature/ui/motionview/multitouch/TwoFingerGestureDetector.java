@@ -1,4 +1,4 @@
-package xyz.themanusia.digitalsignature.widget.motionview.multitouch;
+package xyz.themanusia.digitalsignature.ui.motionview.multitouch;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

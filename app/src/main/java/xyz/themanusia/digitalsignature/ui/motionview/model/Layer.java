@@ -1,4 +1,4 @@
-package xyz.themanusia.digitalsignature.widget.motionview.model;
+package xyz.themanusia.digitalsignature.ui.motionview.model;
 
 import androidx.annotation.FloatRange;
 

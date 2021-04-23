@@ -1,4 +1,4 @@
-package xyz.themanusia.digitalsignature.widget.motionview;
+package xyz.themanusia.digitalsignature.ui.motionview;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -25,9 +25,9 @@ import java.util.List;
 
 import lombok.Getter;
 import xyz.themanusia.digitalsignature.R;
-import xyz.themanusia.digitalsignature.widget.motionview.model.MotionEntity;
-import xyz.themanusia.digitalsignature.widget.motionview.multitouch.MoveGestureDetector;
-import xyz.themanusia.digitalsignature.widget.motionview.multitouch.RotateGestureDetector;
+import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
+import xyz.themanusia.digitalsignature.ui.motionview.multitouch.MoveGestureDetector;
+import xyz.themanusia.digitalsignature.ui.motionview.multitouch.RotateGestureDetector;
 
 public class MotionView extends FrameLayout {
 

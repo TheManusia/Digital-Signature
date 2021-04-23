@@ -31,10 +31,10 @@ import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
-import xyz.themanusia.digitalsignature.widget.motionview.MotionView;
-import xyz.themanusia.digitalsignature.widget.motionview.model.ImageEntity;
-import xyz.themanusia.digitalsignature.widget.motionview.model.Layer;
-import xyz.themanusia.digitalsignature.widget.motionview.model.MotionEntity;
+import xyz.themanusia.digitalsignature.ui.motionview.MotionView;
+import xyz.themanusia.digitalsignature.ui.motionview.model.ImageEntity;
+import xyz.themanusia.digitalsignature.ui.motionview.model.Layer;
+import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
 
 public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
