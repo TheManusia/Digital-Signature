@@ -31,6 +31,8 @@ import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.MoveGestureDetector;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.RotateGestureDetector;
 
+// src: https://github.com/uptechteam/MotionViews-Android
+
 public class MotionView extends FrameLayout {
     private static final String TAG = MotionView.class.getSimpleName();
 

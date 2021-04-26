@@ -110,8 +110,8 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
      * Check if we have a sloppy gesture. Sloppy gestures can happen if the edge
      * of the user's hand is touching the screen, for example.
      *
-     * @param event
-     * @return
+     * @param event MotionEvent
+     * @return boolean
      */
     protected boolean isSloppyGesture(MotionEvent event) {
         // As orientation can change, query the metrics in touch down
@@ -143,8 +143,8 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
     /**
      * MotionEvent has no getRawX(int) method; simulate it pending future API approval.
      *
-     * @param event
-     * @return
+     * @param event MotionEvent
+     * @return float
      */
     protected static float getRawX(MotionEvent event) {
         float offset = event.getX() - event.getRawX();
@@ -157,8 +157,8 @@ public abstract class TwoFingerGestureDetector extends BaseGestureDetector {
     /**
      * MotionEvent has no getRawY(int) method; simulate it pending future API approval.
      *
-     * @param event
-     * @return
+     * @param event MotionEvent
+     * @return float
      */
     protected static float getRawY(MotionEvent event) {
         float offset = event.getY() - event.getRawY();

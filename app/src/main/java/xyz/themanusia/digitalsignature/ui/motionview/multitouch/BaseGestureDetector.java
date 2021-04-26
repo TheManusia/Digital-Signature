@@ -51,8 +51,8 @@ public abstract class BaseGestureDetector {
      * (handleStartProgressEvent, handleInProgressEvent) implemented in
      * extending classes.
      *
-     * @param event
-     * @return
+     * @param event MotionEvent
+     * @return true boolean
      */
     public boolean onTouchEvent(MotionEvent event) {
         final int actionCode = event.getAction() & MotionEvent.ACTION_MASK;
@@ -69,8 +69,8 @@ public abstract class BaseGestureDetector {
      * yet. The handling in this implementation may set the gesture in progress
      * (via mGestureInProgress) or out of progress
      *
-     * @param actionCode
-     * @param event
+     * @param actionCode int
+     * @param event MotionEvent
      */
     protected abstract void handleStartProgressEvent(int actionCode, MotionEvent event);
 
@@ -79,8 +79,8 @@ public abstract class BaseGestureDetector {
      * handling in this implementation may set the gesture out of progress (via
      * mGestureInProgress).
      *
-     * @param actionCode
-     * @param event
+     * @param actionCode int
+     * @param event MotionEvent
      */
     protected abstract void handleInProgressEvent(int actionCode, MotionEvent event);
 
