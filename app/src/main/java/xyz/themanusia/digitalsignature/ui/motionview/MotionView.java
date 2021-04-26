@@ -26,7 +26,6 @@ import java.util.List;
 
 import lombok.Getter;
 import xyz.themanusia.digitalsignature.R;
-import xyz.themanusia.digitalsignature.ui.motionview.model.Layer;
 import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.MoveGestureDetector;
 import xyz.themanusia.digitalsignature.ui.motionview.multitouch.RotateGestureDetector;
@@ -210,8 +209,11 @@ public class MotionView extends FrameLayout {
         }
     }
 
-    public Layer getSelectedEntityLayer() {
-        return selectedEntity.getLayer();
+    public void resetSelectedEntityPosition() {
+        if (selectedEntity != null) {
+            initialTranslateAndScale(selectedEntity);
+            invalidate();
+        }
     }
 
     private void initialTranslateAndScale(@NonNull MotionEntity entity) {
@@ -303,6 +305,14 @@ public class MotionView extends FrameLayout {
         }
         if (entities.remove(selectedEntity)) {
             selectedEntity.release();
+            selectedEntity = null;
+            invalidate();
+        }
+    }
+
+    public void deleteEntity(MotionEntity entity) {
+        if (entities.remove(entity)) {
+            entity.release();
             selectedEntity = null;
             invalidate();
         }

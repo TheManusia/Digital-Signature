@@ -12,11 +12,16 @@
     <string name="insert_title">Insert Title Here</string>
     <string name="edit">Edit</string>
     <string name="title_warning">Insert Title!</string>
-    <string name="cancel">Cancel</string>
     <string name="success_save">Success to save file</string>
     <string name="failed_save">Failed to save file</string>
     <string name="name_exist">Name already exist</string>
     <string name="new_file">New File</string>
     <string name="open">Open</string>
     <string name="add_signature">Add Signature</string>
+    <string name="flip_signature">Flip Signature</string>
+    <string name="flip">Flip</string>
+    <string name="cancel_editing">Cancel editing</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset_position">Reset position</string>
+    <string name="reset">Reset</string>
 </resources>

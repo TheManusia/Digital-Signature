@@ -23,18 +23,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.util.FitPolicy;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.shockwave.pdfium.util.SizeF;
 
 import java.io.File;
+import java.util.List;
 
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
-import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 import xyz.themanusia.digitalsignature.ui.motionview.MotionView;
 import xyz.themanusia.digitalsignature.ui.motionview.model.ImageEntity;
 import xyz.themanusia.digitalsignature.ui.motionview.model.Layer;
 import xyz.themanusia.digitalsignature.ui.motionview.model.MotionEntity;
+import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class PdfActivity extends AppCompatActivity {
     private ActivityPdfBinding binding;
@@ -71,17 +73,35 @@ public class PdfActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SIGNATURE_REQUEST_CODE)
             if (resultCode == RESULT_OK)
-                if (data != null) {
-                    byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
-                    Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
-                    ImageEntity entity = new ImageEntity(new Layer(), signatureBitmap, binding.motionView.getWidth(), binding.motionView.getHeight());
-                    binding.motionView.post(() -> {
-                        binding.motionView.addEntityAndPosition(entity);
-                        binding.motionView.setVisibility(View.VISIBLE);
-                    });
-//                    binding.clipArt.setImageBitmap(signatureBitmap);
-//                    binding.clipArt.setVisibility(View.VISIBLE);
-                }
+                if (data != null)
+                    editorMode(data);
+    }
+
+    private void editorMode(Intent data) {
+        byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
+        Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
+        ImageEntity entity = new ImageEntity(new Layer(), signatureBitmap, binding.motionView.getWidth(), binding.motionView.getHeight());
+        binding.motionView.post(() -> {
+            binding.motionView.addEntityAndPosition(entity);
+            binding.motionView.setVisibility(View.VISIBLE);
+            binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
+            binding.bottomAppBar.replaceMenu(R.menu.edit_menu);
+            binding.fbPdf.setImageResource(R.drawable.ic_baseline_done_24);
+            binding.fbPdf.setOnClickListener(view -> drawImage(binding.motionView.getEntities()));
+        });
+    }
+
+    private void drawImage(List<MotionEntity> entities) {
+        for (MotionEntity entity : entities) {
+            float x = entity.absoluteCenterX();
+            float y = entity.absoluteCenterY();
+            Log.e(TAG, "drawImage: X= " + x + ", Y= " + y);
+            binding.motionView.deleteEntity(entity);
+        }
+
+        binding.motionView.deletedSelectedEntity();
+        binding.motionView.setVisibility(View.INVISIBLE);
+        cancelEditorMode();
     }
 
     @Override
@@ -123,7 +143,8 @@ public class PdfActivity extends AppCompatActivity {
                         binding.bottomAppBar.animate().translationY(binding.bottomAppBar.getBottom())
                                 .setInterpolator(new AccelerateInterpolator()).start();
                         binding.topAppBar.animate().translationY(-binding.topAppBar.getBottom())
-                                .setInterpolator(new AccelerateInterpolator()).start();
+                                .setInterpolator(new AccelerateInterpolator()).withEndAction(() ->
+                                binding.topAppBar.setVisibility(View.GONE));
                         binding.fbPdf.animate().translationY(binding.fbPdf.getBottom())
                                 .setInterpolator(new AccelerateInterpolator()).start();
                         isShow = false;
@@ -137,7 +158,8 @@ public class PdfActivity extends AppCompatActivity {
                         binding.bottomAppBar.animate().translationY(0)
                                 .setInterpolator(new DecelerateInterpolator()).start();
                         binding.topAppBar.animate().translationY(0)
-                                .setInterpolator(new DecelerateInterpolator()).start();
+                                .setInterpolator(new DecelerateInterpolator()).withStartAction(() ->
+                                binding.topAppBar.setVisibility(View.VISIBLE));
                         binding.fbPdf.animate().translationY(0)
                                 .setInterpolator(new DecelerateInterpolator()).start();
                         isShow = true;
@@ -164,6 +186,23 @@ public class PdfActivity extends AppCompatActivity {
         binding.pdfView.setMaxZoom(1);
         binding.pdfView.setMinZoom(1);
 
+        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.cancel) {
+                binding.motionView.deletedSelectedEntity();
+                cancelEditorMode();
+                return true;
+            } else if (itemId == R.id.flip) {
+                binding.motionView.flipSelectedEntity();
+                return true;
+            } else if (itemId == R.id.reset) {
+                binding.motionView.resetSelectedEntityPosition();
+                return true;
+            }
+
+            return false;
+        });
+
         binding.motionView.setMotionViewCallback(new MotionView.MotionViewCallback() {
             @Override
             public void onEntitySelected(@Nullable MotionEntity entity) {
@@ -175,6 +214,17 @@ public class PdfActivity extends AppCompatActivity {
         });
 
         binding.tvPage.setOnClickListener(view -> showDialogPage());
+    }
+
+    private void cancelEditorMode() {
+        binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
+        binding.bottomAppBar.replaceMenu(R.menu.empty_menu);
+
+        binding.fbPdf.setOnClickListener(view -> {
+            Intent signature = new Intent(PdfActivity.this, SignatureActivity.class);
+            startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
+        });
+        binding.fbPdf.setImageResource(R.drawable.ic_baseline_add_24);
     }
 
     private void showDialogPage() {
