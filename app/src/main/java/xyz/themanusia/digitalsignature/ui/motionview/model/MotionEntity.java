@@ -1,5 +1,6 @@
 package xyz.themanusia.digitalsignature.ui.motionview.model;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -232,6 +233,8 @@ public abstract class MotionEntity {
     public abstract int getWidth();
 
     public abstract int getHeight();
+
+    public abstract Bitmap getBitmap();
 
     public void release() {
         // free resources here

@@ -53,6 +53,12 @@ public class ImageEntity extends MotionEntity {
     }
 
     @Override
+    @NonNull
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    @Override
     public void release() {
         if (!bitmap.isRecycled())
             bitmap.recycle();

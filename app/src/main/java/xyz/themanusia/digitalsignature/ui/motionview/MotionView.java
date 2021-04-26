@@ -211,7 +211,10 @@ public class MotionView extends FrameLayout {
 
     public void resetSelectedEntityPosition() {
         if (selectedEntity != null) {
-            initialTranslateAndScale(selectedEntity);
+            selectedEntity.moveToCanvasCenter();
+            selectedEntity.getLayer().setScale(selectedEntity.getLayer().initialScale());
+            selectedEntity.getLayer().setFlipped(false);
+            selectedEntity.getLayer().setRotationInDegrees(0);
             invalidate();
         }
     }
@@ -337,8 +340,12 @@ public class MotionView extends FrameLayout {
                 moveGestureDetector.onTouchEvent(event);
                 gestureDetectorCompat.onTouchEvent(event);
             }
-            if (getSelectedEntity() != null)
-                Log.e(TAG, "findEntityAtPoint: X= " + getSelectedEntity().absoluteCenterX() + ", Y= " + getSelectedEntity().absoluteCenterY());
+            if (getSelectedEntity() != null) {
+                Log.e(TAG, "onTouch: X= " + getSelectedEntity().absoluteCenterX() + ", Y= " + getSelectedEntity().absoluteCenterY());
+                Log.e(TAG, "onTouch: Scale= " + getSelectedEntity().getLayer().getScale());
+                Log.e(TAG, "onTouch: Width= " + (getSelectedEntity().getWidth() * getSelectedEntity().getLayer().getScale()) +
+                        ", Height= " + (getSelectedEntity().getHeight() * getSelectedEntity().getLayer().getScale()));
+            }
             return true;
         }
     };
