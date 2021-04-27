@@ -60,7 +60,7 @@ public class MotionView extends FrameLayout {
 
     // gesture detection
     private ScaleGestureDetector scaleGestureDetector;
-    private RotateGestureDetector rotateGestureDetector;
+    //    private RotateGestureDetector rotateGestureDetector;
     private MoveGestureDetector moveGestureDetector;
     private GestureDetectorCompat gestureDetectorCompat;
 
@@ -97,7 +97,7 @@ public class MotionView extends FrameLayout {
 
         // init listeners
         this.scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
-        this.rotateGestureDetector = new RotateGestureDetector(context, new RotateListener());
+//        this.rotateGestureDetector = new RotateGestureDetector(context, new RotateListener());
         this.moveGestureDetector = new MoveGestureDetector(context, new MoveListener());
         this.gestureDetectorCompat = new GestureDetectorCompat(context, new TapsListener());
 
@@ -336,12 +336,13 @@ public class MotionView extends FrameLayout {
         public boolean onTouch(View v, MotionEvent event) {
             if (scaleGestureDetector != null) {
                 scaleGestureDetector.onTouchEvent(event);
-                rotateGestureDetector.onTouchEvent(event);
+//                rotateGestureDetector.onTouchEvent(event);
                 moveGestureDetector.onTouchEvent(event);
                 gestureDetectorCompat.onTouchEvent(event);
             }
             if (getSelectedEntity() != null) {
                 Log.e(TAG, "onTouch: X= " + getSelectedEntity().absoluteCenterX() + ", Y= " + getSelectedEntity().absoluteCenterY());
+                Log.e(TAG, "onTouch: BottomLeftX= " + getSelectedEntity().bottomLeftX() + ", BottomLeftY= " + getSelectedEntity().bottomLeftY());
                 Log.e(TAG, "onTouch: Scale= " + getSelectedEntity().getLayer().getScale());
                 Log.e(TAG, "onTouch: Width= " + (getSelectedEntity().getWidth() * getSelectedEntity().getLayer().getScale()) +
                         ", Height= " + (getSelectedEntity().getHeight() * getSelectedEntity().getLayer().getScale()));
