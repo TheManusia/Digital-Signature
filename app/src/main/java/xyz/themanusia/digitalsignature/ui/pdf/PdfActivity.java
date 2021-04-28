@@ -78,6 +78,7 @@ public class PdfActivity extends AppCompatActivity {
         binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         binding.bottomAppBar.replaceMenu(R.menu.edit_menu);
         binding.fbPdf.setImageResource(R.drawable.ic_baseline_done_24);
+        binding.fbPdf.setOnClickListener(view -> drawImage());
     }
 
     @SneakyThrows
