@@ -25,13 +25,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.shockwave.pdfium.util.SizeF;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.pdmodel.PDPage;
+import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 import java.util.List;
 
+import lombok.SneakyThrows;
+import xyz.themanusia.digitalsignature.MainActivity;
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
+import xyz.themanusia.digitalsignature.tools.Tools;
 import xyz.themanusia.digitalsignature.ui.motionview.MotionView;
 import xyz.themanusia.digitalsignature.ui.motionview.model.ImageEntity;
 import xyz.themanusia.digitalsignature.ui.motionview.model.Layer;
@@ -91,11 +99,32 @@ public class PdfActivity extends AppCompatActivity {
         });
     }
 
+    @SneakyThrows
     private void drawImage(List<MotionEntity> entities) {
         for (MotionEntity entity : entities) {
-            float x = entity.absoluteCenterX();
-            float y = entity.absoluteCenterY();
-            Log.e(TAG, "drawImage: X= " + x + ", Y= " + y);
+            PDDocument doc = PDDocument.load(Tools.getFile(this, pdfUri));
+            PDImageXObject image = JPEGFactory.createFromImage(doc, entity.getBitmap());
+            float height = image.getHeight() * entity.getLayer().getScale();
+            float width = image.getWidth() * entity.getLayer().getScale();
+            float x = binding.motionView.selectedBottomLeftX();
+            float y = binding.motionView.selectedBottomLeftY();
+
+            String path = MainActivity.CACHE_PATH + File.separator + dir.getName();
+
+            PDPage page = doc.getPage(currentPage - 1);
+            PDPageContentStream contentStream = new PDPageContentStream(doc, page, true, false, false);
+            contentStream.drawImage(image, x, y, width, height);
+            contentStream.close();
+            doc.save(MainActivity.CACHE_PATH + File.separator + dir.getName());
+            doc.close();
+
+            Log.e(TAG, "drawImage: x= " + x + ", y= " + y);
+            Log.e(TAG, "drawImage: image height= " + (image.getHeight() * entity.getLayer().getScale()) + ", width= " + (image.getWidth() * entity.getLayer().getScale()));
+            Log.e(TAG, "drawImage: entity height= " + (entity.getHeight() * entity.getLayer().getScale()) + ", width= " + (entity.getWidth() * entity.getLayer().getScale()));
+            Log.e(TAG, "drawImage: page height= " + page.getCropBox().getHeight() + ", width= " + page.getCropBox().getWidth());
+
+            loadPdf(Uri.fromFile(new File(path)));
+
             binding.motionView.deleteEntity(entity);
         }
 
@@ -112,13 +141,6 @@ public class PdfActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void init() {
-        AlphaAnimation out = new AlphaAnimation(1.0f, 0.0f);
-        out.setDuration(1000);
-        out.setRepeatMode(Animation.REVERSE);
-
-        AlphaAnimation in = new AlphaAnimation(0.0f, 1.0f);
-        in.setDuration(1000);
-        in.setRepeatMode(Animation.REVERSE);
 
         binding.topAppBar.setTitle(dir.getName());
 
@@ -127,7 +149,47 @@ public class PdfActivity extends AppCompatActivity {
             startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
         });
 
-        binding.pdfView.fromUri(pdfUri)
+        loadPdf(pdfUri);
+        binding.pdfView.setMaxZoom(1);
+        binding.pdfView.setMinZoom(1);
+
+        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.cancel) {
+                binding.motionView.deletedSelectedEntity();
+                cancelEditorMode();
+                return true;
+            } else if (itemId == R.id.reset) {
+                binding.motionView.resetSelectedEntityPosition();
+                return true;
+            }
+
+            return false;
+        });
+
+        binding.motionView.setMotionViewCallback(new MotionView.MotionViewCallback() {
+            @Override
+            public void onEntitySelected(@Nullable MotionEntity entity) {
+            }
+
+            @Override
+            public void onEntityDoubleTap(@NonNull MotionEntity entity) {
+            }
+        });
+
+        binding.tvPage.setOnClickListener(view -> showDialogPage());
+    }
+
+    private void loadPdf(Uri pdf) {
+        AlphaAnimation out = new AlphaAnimation(1.0f, 0.0f);
+        out.setDuration(1000);
+        out.setRepeatMode(Animation.REVERSE);
+
+        AlphaAnimation in = new AlphaAnimation(0.0f, 1.0f);
+        in.setDuration(1000);
+        in.setRepeatMode(Animation.REVERSE);
+
+        binding.pdfView.fromUri(pdf)
                 .enableSwipe(true)
                 .enableDoubletap(false)
                 .swipeHorizontal(true)
@@ -183,37 +245,6 @@ public class PdfActivity extends AppCompatActivity {
                     Log.d(TAG, "init: pageHeight= " + pageHeight + " pageWidth= " + pageWidth);
                 })
                 .load();
-        binding.pdfView.setMaxZoom(1);
-        binding.pdfView.setMinZoom(1);
-
-        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.cancel) {
-                binding.motionView.deletedSelectedEntity();
-                cancelEditorMode();
-                return true;
-            } else if (itemId == R.id.flip) {
-                binding.motionView.flipSelectedEntity();
-                return true;
-            } else if (itemId == R.id.reset) {
-                binding.motionView.resetSelectedEntityPosition();
-                return true;
-            }
-
-            return false;
-        });
-
-        binding.motionView.setMotionViewCallback(new MotionView.MotionViewCallback() {
-            @Override
-            public void onEntitySelected(@Nullable MotionEntity entity) {
-            }
-
-            @Override
-            public void onEntityDoubleTap(@NonNull MotionEntity entity) {
-            }
-        });
-
-        binding.tvPage.setOnClickListener(view -> showDialogPage());
     }
 
     private void cancelEditorMode() {

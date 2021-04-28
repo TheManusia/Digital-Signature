@@ -21,7 +21,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String FOLDER_PATH = Environment.getExternalStorageDirectory() + File.separator + "DigitalSignature";
-    private static final String CACHE_PATH = FOLDER_PATH + File.separator + "cache";
+    public static final String CACHE_PATH = FOLDER_PATH + File.separator + "cache";
     private static final String[] PERMISSION = new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE};
     private static final int PERMISSION_CODE = 1;
 

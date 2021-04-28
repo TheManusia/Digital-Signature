@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.Log;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import xyz.themanusia.digitalsignature.tools.MathTools;
 
 @SuppressWarnings({"WeakerAccess"})
 public abstract class MotionEntity {
+
+    private static final String TAG = MotionEntity.class.getSimpleName();
 
     /**
      * data

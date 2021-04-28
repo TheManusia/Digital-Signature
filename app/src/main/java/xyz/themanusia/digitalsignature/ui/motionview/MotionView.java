@@ -328,6 +328,24 @@ public class MotionView extends FrameLayout {
         }
     }
 
+    public float selectedBottomLeftX() {
+        if (selectedEntity != null) {
+            float center = selectedEntity.absoluteCenterX();
+            float a = (getWidth() * selectedEntity.getLayer().getScale()) / 2.0f;
+            return (center - a);
+        }
+        return -1;
+    }
+
+    public float selectedBottomLeftY() {
+        if (selectedEntity != null) {
+            float center = selectedEntity.absoluteCenterY();
+            float a = (selectedEntity.getHeight() * selectedEntity.getLayer().getScale()) / 2;
+            return getHeight() - (center + a);
+        }
+        return -1;
+    }
+
     // gesture detectors
 
     private final View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -342,10 +360,10 @@ public class MotionView extends FrameLayout {
             }
             if (getSelectedEntity() != null) {
                 Log.e(TAG, "onTouch: X= " + getSelectedEntity().absoluteCenterX() + ", Y= " + getSelectedEntity().absoluteCenterY());
-                Log.e(TAG, "onTouch: BottomLeftX= " + getSelectedEntity().bottomLeftX() + ", BottomLeftY= " + getSelectedEntity().bottomLeftY());
+                Log.e(TAG, "onTouch: BottomLeftX= " + selectedBottomLeftX() + ", BottomLeftY= " + selectedBottomLeftY());
                 Log.e(TAG, "onTouch: Scale= " + getSelectedEntity().getLayer().getScale());
-                Log.e(TAG, "onTouch: Width= " + (getSelectedEntity().getWidth() * getSelectedEntity().getLayer().getScale()) +
-                        ", Height= " + (getSelectedEntity().getHeight() * getSelectedEntity().getLayer().getScale()));
+                Log.e(TAG, "onTouch: Width= " + (getSelectedEntity().getWidth()) +
+                        ", Height= " + (getSelectedEntity().getHeight()));
             }
             return true;
         }
