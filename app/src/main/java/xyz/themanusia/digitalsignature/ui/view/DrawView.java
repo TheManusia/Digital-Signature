@@ -21,11 +21,17 @@ public class DrawView extends View {
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
+        init();
     }
 
     public DrawView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
         mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(5.0f);
         mPaint.setColor(Color.BLACK);
 
         setFocusable(true);
@@ -70,18 +76,18 @@ public class DrawView extends View {
     }
 
     public float getRectX() {
-        return mStartX;
+        return Math.min(mStartX, mEndX);
     }
 
     public float getRectY() {
-        return mStartY;
+        return Math.min(mStartY, mEndY);
     }
 
     public float getRectWidth() {
-        return mStartX - mEndX;
+        return Math.abs(mStartX - mEndX);
     }
 
     public float getRectHeight() {
-        return mStartY - mEndY;
+        return Math.abs(mStartY - mEndY);
     }
 }
