@@ -129,7 +129,7 @@ public class PdfActivity extends AppCompatActivity {
         contentStream.drawImage(image, binding.drawView.getRectX(),
                 (binding.drawView.getHeight() - binding.drawView.getRectY()), width, height);
         contentStream.close();
-        doc.save(MainActivity.CACHE_PATH + File.separator + dir.getName());
+        doc.save(path);
         doc.close();
 
         loadPdf(Uri.fromFile(new File(path)));
