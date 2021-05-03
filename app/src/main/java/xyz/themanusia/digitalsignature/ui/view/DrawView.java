@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,6 +17,8 @@ public class DrawView extends View {
     private int mStartY;
     private int mEndX;
     private int mEndY;
+
+    private static final String TAG = DrawView.class.getSimpleName();
 
     private final Paint mPaint = new Paint();
 
@@ -64,6 +67,8 @@ public class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.d(TAG, "onDraw: mStartX= " + mStartX + ", mStartY= " + mStartY);
+        Log.d(TAG, "onDraw: mEndX= " + mEndX + ", mEndY= " + mEndY);
         canvas.drawRect(mStartX, mStartY, mEndX, mEndY, mPaint);
     }
 
@@ -80,7 +85,7 @@ public class DrawView extends View {
     }
 
     public float getRectY() {
-        return Math.min(mStartY, mEndY);
+        return Math.max(mStartY, mEndY);
     }
 
     public float getRectWidth() {

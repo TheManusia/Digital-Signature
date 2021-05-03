@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -24,13 +25,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.shockwave.pdfium.util.SizeF;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.pdmodel.PDPage;
+import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
+import com.tom_roush.pdfbox.pdmodel.common.PDRectangle;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import java.io.File;
 
 import lombok.SneakyThrows;
+import xyz.themanusia.digitalsignature.MainActivity;
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityPdfBinding;
 import xyz.themanusia.digitalsignature.databinding.PageDialogBinding;
+import xyz.themanusia.digitalsignature.tools.Tools;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class PdfActivity extends AppCompatActivity {
@@ -44,6 +53,7 @@ public class PdfActivity extends AppCompatActivity {
     private boolean isShow = true;
     private File dir;
     private static final String TAG = PdfActivity.class.getSimpleName();
+    private boolean isEditing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,25 +79,60 @@ public class PdfActivity extends AppCompatActivity {
         if (requestCode == SIGNATURE_REQUEST_CODE)
             if (resultCode == RESULT_OK)
                 if (data != null)
-                    editorMode(data);
+                    drawImage(data);
     }
 
-    private void editorMode(Intent data) {
-        byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
-        Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
+    private void editorMode() {
+        binding.drawView.setVisibility(View.VISIBLE);
         binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
         binding.bottomAppBar.replaceMenu(R.menu.edit_menu);
         binding.fbPdf.setImageResource(R.drawable.ic_baseline_done_24);
-        binding.fbPdf.setOnClickListener(view -> drawImage());
+        isEditing = true;
+        binding.fbPdf.setOnClickListener(view -> getSignature());
+    }
+
+    private void getSignature() {
+        Intent signature = new Intent(PdfActivity.this, SignatureActivity.class);
+        startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
     }
 
     @SneakyThrows
-    private void drawImage() {
+    private void drawImage(Intent data) {
+        byte[] signatureByte = data.getByteArrayExtra(SIGNATURE_BITMAP);
+        Bitmap signatureBitmap = BitmapFactory.decodeByteArray(signatureByte, 0, signatureByte.length);
 
+        PDDocument doc = PDDocument.load(Tools.getFile(this, pdfUri));
+        PDImageXObject image = JPEGFactory.createFromImage(doc, signatureBitmap);
+        float rectHeight = binding.drawView.getRectHeight();
+        float rectWidth = binding.drawView.getRectWidth();
+        float imageHeight = signatureBitmap.getHeight();
+        float imageWidth = signatureBitmap.getWidth();
 
-//        loadPdf(Uri.fromFile(new File(path)));
+        float widthRatio = rectWidth / imageWidth;
+        float heightRatio = rectHeight / imageHeight;
+        float ratio = Math.min(widthRatio, heightRatio);
 
+        float height = rectHeight * ratio;
+        float width = rectWidth * ratio;
 
+        PDPage page = doc.getPage(currentPage - 1);
+        PDRectangle pageBounds = page.getMediaBox();
+        float x = binding.drawView.getRectX() * binding.drawView.getWidth() / pageBounds.getWidth();
+        float y = (binding.drawView.getHeight() - binding.drawView.getRectY()) * binding.drawView.getHeight() / pageBounds.getHeight();
+
+        Log.d(TAG, "drawImage: x= " + x + ", y= " + y);
+        Log.d(TAG, "drawImage: width= " + width + ", height= " + height);
+
+        String path = MainActivity.CACHE_PATH + File.separator + dir.getName();
+
+        PDPageContentStream contentStream = new PDPageContentStream(doc, page, true, false, false);
+        contentStream.drawImage(image, binding.drawView.getRectX(),
+                (binding.drawView.getHeight() - binding.drawView.getRectY()), width, height);
+        contentStream.close();
+        doc.save(MainActivity.CACHE_PATH + File.separator + dir.getName());
+        doc.close();
+
+        loadPdf(Uri.fromFile(new File(path)));
         cancelEditorMode();
     }
 
@@ -102,10 +147,7 @@ public class PdfActivity extends AppCompatActivity {
 
         binding.topAppBar.setTitle(dir.getName());
 
-        binding.fbPdf.setOnClickListener(view -> {
-            Intent signature = new Intent(PdfActivity.this, SignatureActivity.class);
-            startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
-        });
+        binding.fbPdf.setOnClickListener(view -> editorMode());
 
         loadPdf(pdfUri);
         binding.pdfView.setMaxZoom(1);
@@ -118,7 +160,7 @@ public class PdfActivity extends AppCompatActivity {
                 cancelEditorMode();
                 return true;
             } else if (itemId == R.id.reset) {
-
+                binding.drawView.clear();
                 return true;
             }
 
@@ -147,17 +189,19 @@ public class PdfActivity extends AppCompatActivity {
                 .fitEachPage(true)
                 .autoSpacing(true)
                 .onPageScroll((page, positionOffset) -> {
-                    if (isShow) {
-                        binding.tvPage.startAnimation(out);
-                        binding.tvPage.setVisibility(View.INVISIBLE);
-                        binding.bottomAppBar.animate().translationY(binding.bottomAppBar.getBottom())
-                                .setInterpolator(new AccelerateInterpolator()).start();
-                        binding.topAppBar.animate().translationY(-binding.topAppBar.getBottom())
-                                .setInterpolator(new AccelerateInterpolator()).withEndAction(() ->
-                                binding.topAppBar.setVisibility(View.GONE));
-                        binding.fbPdf.animate().translationY(binding.fbPdf.getBottom())
-                                .setInterpolator(new AccelerateInterpolator()).start();
-                        isShow = false;
+                    if (!isEditing) {
+                        if (isShow) {
+                            binding.tvPage.startAnimation(out);
+                            binding.tvPage.setVisibility(View.INVISIBLE);
+                            binding.bottomAppBar.animate().translationY(binding.bottomAppBar.getBottom())
+                                    .setInterpolator(new AccelerateInterpolator()).start();
+                            binding.topAppBar.animate().translationY(-binding.topAppBar.getBottom())
+                                    .setInterpolator(new AccelerateInterpolator()).withEndAction(() ->
+                                    binding.topAppBar.setVisibility(View.GONE));
+                            binding.fbPdf.animate().translationY(binding.fbPdf.getBottom())
+                                    .setInterpolator(new AccelerateInterpolator()).start();
+                            isShow = false;
+                        }
                     }
                 })
                 .onTap(e -> {
@@ -186,10 +230,10 @@ public class PdfActivity extends AppCompatActivity {
                     SizeF size = binding.pdfView.getPageSize(page);
                     float pageHeight = size.getHeight();
                     float pageWidth = size.getWidth();
-//                    ViewGroup.LayoutParams layoutParams = binding.motionView.getLayoutParams();
-//                    layoutParams.height = (int) pageHeight;
-//                    layoutParams.width = (int) pageWidth;
-//                    binding.motionView.setLayoutParams(layoutParams);
+                    ViewGroup.LayoutParams layoutParams = binding.drawView.getLayoutParams();
+                    layoutParams.height = (int) pageHeight;
+                    layoutParams.width = (int) pageWidth;
+                    binding.drawView.setLayoutParams(layoutParams);
                     Log.d(TAG, "init: pageHeight= " + pageHeight + " pageWidth= " + pageWidth);
                 })
                 .load();
@@ -198,11 +242,12 @@ public class PdfActivity extends AppCompatActivity {
     private void cancelEditorMode() {
         binding.bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
         binding.bottomAppBar.replaceMenu(R.menu.empty_menu);
+        binding.drawView.setVisibility(View.GONE);
+        binding.drawView.clear();
 
-        binding.fbPdf.setOnClickListener(view -> {
-            Intent signature = new Intent(PdfActivity.this, SignatureActivity.class);
-            startActivityForResult(signature, SIGNATURE_REQUEST_CODE);
-        });
+        binding.fbPdf.setOnClickListener(view -> editorMode());
+
+        isEditing = false;
         binding.fbPdf.setImageResource(R.drawable.ic_baseline_add_24);
     }
 
