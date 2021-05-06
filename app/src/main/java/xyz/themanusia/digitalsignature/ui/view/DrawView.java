@@ -52,9 +52,19 @@ public class DrawView extends View {
             case MotionEvent.ACTION_MOVE:
 
             case MotionEvent.ACTION_UP:
-                mEndX = (int) event.getX();
-                mEndY = (int) event.getY();
-                invalidate();
+
+                boolean a = false;
+                if (event.getX() <= getWidth() && event.getX() >= 0) {
+                    mEndX = (int) event.getX();
+                    a = true;
+                }
+                if (event.getY() <= getHeight() && event.getY() >= 0) {
+                    mEndY = (int) event.getY();
+                    a = true;
+                }
+
+                if (a)
+                    invalidate();
                 break;
 
             default:
