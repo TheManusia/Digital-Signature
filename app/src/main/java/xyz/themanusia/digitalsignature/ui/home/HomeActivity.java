@@ -11,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.pdftron.pdf.controls.DocumentActivity;
+
 import xyz.themanusia.digitalsignature.R;
 import xyz.themanusia.digitalsignature.databinding.ActivityHomeBinding;
-import xyz.themanusia.digitalsignature.ui.pdf.PdfActivity;
 import xyz.themanusia.digitalsignature.ui.signature.SignatureActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -58,9 +59,10 @@ public class HomeActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (data != null) {
                 Uri pdfUri = data.getData();
-                Intent intent = new Intent(this, PdfActivity.class);
-                intent.putExtra(PdfActivity.PDF_URI, pdfUri.toString());
-                startActivity(intent);
+                DocumentActivity.openDocument(this, pdfUri);
+//                Intent intent = new Intent(this, PdfActivity.class);
+//                intent.putExtra(PdfActivity.PDF_URI, pdfUri.toString());
+//                startActivity(intent);
             } else {
                 Toast.makeText(this, "Can't Open File", Toast.LENGTH_SHORT).show();
             }
